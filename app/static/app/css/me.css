@@ -1,0 +1,59 @@
+.button-primary {
+    color: black;
+    background-color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.button-primary:hover {
+    background: rgb(53, 48, 48);
+    color: white;
+    border-radius: 12px;
+}
+
+h2 {
+    color: black;
+}
+
+.card{
+    border-radius: 24px;
+}
+
+.card-body{
+    background-color: rgb(40, 40, 40);
+    border-radius: 30px;
+}
+
+.card-title{
+    font-size: x-large;
+    background-color: rgb(40, 40, 40);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.btn {
+    background-color: rgb(252, 251, 251);
+    color: rgb(0, 0, 0);
+}
+
+.btn:hover{
+    background-color: rgb(28, 28, 28);
+    color: white;
+}
+
+.btn-outline-dark{
+    background-color: white;
+    color: #000;
+}
+
+.btn-outline-dark:hover{
+    background-color: #000;
+    color: #fff;
+}
+
+.dropdown-menu {
+    padding: 5px;
+}
+
+
+

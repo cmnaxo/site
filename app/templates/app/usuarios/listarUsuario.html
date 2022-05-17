@@ -1,0 +1,159 @@
+<!--SEGUIMIENTO Y DESPACHO-->
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<!-- Eliminar producto Sweetalert -->
+<script>
+    function eliminarUsuario(cod_usuario) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás deshacer esto",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '¡Sí, eliminar!',
+            cancelButtonText: '¡No, cancelar!',
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    '¡Eliminado!',
+                    'El usuario ha sido eliminado.',
+                    'success',
+                    window.location.href = "/eliminarUsuario/" + cod_usuario
+                )
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                Swal.fire(
+                    'Cancelado',
+                    'Tu usuario imaginario está a salvo :)',
+                    'error'
+                )
+            }
+        })
+    }
+</script>
+
+
+<head>
+
+    <title>Listar usuarios</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="{% static 'app/images/agregar.png' %}" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Slysheet -->
+    <link rel="stylesheet" href="{% static 'app/css/me.css' %}">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-light bg-light fw-bold">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index-log' %}">
+                <img src="{% static 'app/images/logo-removebg-preview.png' %}" alt="" width="40" height="34"
+                    class="d-inline-block align-text-top">
+                Fundacion COG
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-5 rounded shadow">
+        <div class="row align-items-stretch">
+            <!-- Parte derecha del container -->
+            <div class="col p-5 rounded-end">
+                <div class="text-end">
+                    <a href="{% url 'index-log' %}"><img src="{% static 'app/images/logo.png' %}" width="48" alt=""></a>
+                </div>
+
+                <h2 class="fw-bold text-center py-5">Listado de usuarios</h2>
+
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped caption-top mx-auto">
+                        <caption>Listado de usuarios</caption>
+                        <thead>
+                            <tr>
+                                <div class="my-5">
+                                    <td>CODIGO USUARIO</td>
+                                    <td>NOMBRE</td>
+                                    <td>APELLIDO</td>
+                                    <td>CORREO</td>
+                                    <td>TIPO USUARIO</td>
+                                    <td>IMAGEN</td>
+                                    <td>FECHA CONTRATACION</td>
+                                    <td>OPCIONES</td>
+                                </div>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for aux in listaUsuarios %}
+                            <tr class="align-bottom">
+                                <td>{{ aux.cod_usuario }}</td>
+                                <td>{{ aux.primer_nombre }}</td>
+                                <td>{{ aux.primer_apellido }}</td>
+                                <td>{{ aux.correo }}</td>
+                                <td>{{ aux.tipo_usuario }}</td>
+                                {% if aux.imagen %}
+                                <td><img src="{{ aux.imagen.url }}" alt="" width="81" height="80"></td>
+                                {% endif %}
+                                <td>{{ aux.created_at }}</td>
+                                <td class="align-top">
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'modificarUsuario' aux.cod_usuario %}"
+                                            class="btn btn-info my-2 mx-2">Modificar</a>
+                                        <a href="#" onclick="eliminarUsuario({{ aux.cod_usuario }})"
+                                            class="btn btn-danger my-2 mx-2">Eliminar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="a
+        nonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+    {% if messages %}
+
+    {% for m in messages %}
+
+    <script>
+        Swal.fire({
+            "title": "Felicitaciones",
+            "text": "{{m}}",
+            "icon": "success"
+        })
+    </script>
+
+    {% endfor %}
+
+    {% endif %}
+
+
+</body>
+
+</html>

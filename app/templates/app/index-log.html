@@ -1,0 +1,156 @@
+{% extends 'app/base-2.html' %}
+
+{% load static %}
+
+{% block js %}
+<script src="{% static 'app/js/core.min.js' %}"></script>
+<script src="{% static 'app/js/script.js' %}"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'app/css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+{% endblock %}
+
+
+
+{% block swiper-log %}
+<div class="swiper-container swiper-slider swiper-slider_height-1" data-loop="true" data-autoplay="4200"
+  data-simulate-touch="false" data-additional-slides="0" data-custom-prev="#swiper-prev" data-custom-next="#swiper-next"
+  data-custom-slide-effect="interLeaveEffect">
+  <div class="swiper-wrapper">
+    <!-- Productos -->
+    <div class="swiper-slide bg-gray-dark">
+      <div class="slide-inner" style="background-image: url({% static 'app/images/adopta.png' %});">
+        <div class="swiper-slide-caption">
+          <div class="container">
+            <h1 data-caption-animate="fadeInUpSmall">Ayúdanos a generar fondos</h1>
+            <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall" data-caption-delay="300">
+              Puedes ayudarnos a recaudar fondos mediante la compra
+              de nuestros productos
+              o con la suscripción mensual.</p><a class="button button-primary" href="{% url 'products' %}"
+              data-caption-animate="fadeInRightSmall" data-caption-delay="550">ver nuestros productos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Donaciones -->
+    <div class="swiper-slide bg-gray-dark">
+      <div class="slide-inner" style="background-image: url({% static 'app/images/donacion.jpg' %});">
+        <div class="swiper-slide-caption">
+          <div class="container">
+            <h1 data-caption-animate="fadeInUpSmall">¿Deseas donar?</h1>
+            <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall" data-caption-delay="300">
+              Nuestro sistema de donación posee la mayor cantidad de
+              opciones posibles;
+              desde efectivo hasta tarjetas y/o giftcards.</p><a class="button button-primary"
+              href="{% url 'donation' %}" data-caption-animate="fadeInRightSmall" data-caption-delay="550">donar
+              ahora</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Beneficios -->
+    <div class="swiper-slide bg-gray-dark">
+      <div class="slide-inner" style="background-image: url({% static 'app/images/pets.jpg' %});">
+        <div class="swiper-slide-caption">
+          <div class="container tw-bold">
+            <h1 data-caption-animate="fadeInUpSmall">Beneficios</h1>
+            <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall" data-caption-delay="300">En
+              caso de haber accedido a la suscripción de nuestra
+              fundación, esta le
+              otorgará un 5% de descuento en todos los productos disponibles.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Swiper pagination-->
+  <div class="swiper-pagination"></div>
+  <!-- Swiper Navigation-->
+  <div class="swiper-button-prev"><span>Prev</span></div>
+  <div class="swiper-button-next"><span>Next</span></div>
+</div>
+{% endblock %}
+
+
+
+{% load humanize %}
+{% block prods %}
+<div class="isotope-wrap isotope-modern-wrap">
+  <!-- Section Header-->
+  <div class="section__header">
+    <h2>Más vendidos</h2>
+    <div class="section__header-element"><a class="link-cta" href="{% url 'products' %}">ver todos los
+        productos</a>
+    </div>
+  </div>
+  <div class="isotope" data-isotope-layout="fitRows" data-isotope-group="products">
+    <div class="row row-offset-2">
+      {% for aux in listaProductos %}
+      <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
+        <!-- Product-->
+        <article class="product">
+          <a class="product__image-wrap" href="#">
+            {% if aux.imagen %}
+            <img class="product__image" src="{{ aux.imagen.url }}" alt="" width="210" height="200" />
+            {% else %}
+            <img src="product_image" src="{% static 'app/images/defecto.png' %}" alt="" width="210" height="200">
+            {% endif %}
+          </a>
+          <div class="product__main">
+            <p class="product__title"><a href="#">{{ aux.nombre | title }}</a></p>
+            <p class="product__price mt-1">{{ aux.precio | intcomma }}</p>
+            <p class="product__price">{{ aux.stock }}</p>
+          </div>
+          <div class="product__footer">
+            <form action="" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+              <input type="hidden" name="nombre_producto" id="nombre_producto" value="{{ aux.nombre | title }}">
+              <input type="hidden" name="precio_producto" id="precio_producto" value="{{ aux.precio }}">
+              <input type="submit" style="cursor: pointer;" class="button button-xs button-gray-2"
+                value="Agregar al carro">
+            </form>
+          </div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block foot-log %}
+<div class="footer-classic__main">
+  <ul class="list-nav-bordered">
+    <li><a href="{% url 'index-log' %}">Inicio</a></li>
+    <li><a href="{% url 'about-us' %}">Sobre nosotros</a></li>
+    <li><a href="{% url 'products' %}">Productos</a></li>
+    </li>
+  </ul>
+</div>
+<div class="divider"></div>
+<div class="footer-classic__aside">
+  <div class="row row-20">
+    <div class="col-md-6 text-md-left">
+      <!-- Rights-->
+      <p class="rights"><span>Fundación Cog</span><span>&nbsp;&copy;&nbsp;</span><span class="copyright-year"></span>.
+        Todos los Derechos Reservados.</p>
+    </div>
+    <div class="col-md-6 text-md-right">
+      <ul class="list-inline-xxs">
+        <li>
+          <p>Síguenos</p>
+        </li>
+        <li><a class="icon icon-xs icon-style-modern fa fa-facebook" href="#"></a></li>
+        <li><a class="icon icon-xs icon-style-modern fa fa-twitter" href="#"></a></li>
+        <li><a class="icon icon-xs icon-style-modern fa fa-instagram" href="#"></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

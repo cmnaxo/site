@@ -1,0 +1,95 @@
+<!--SEGUIMIENTO Y DESPACHO-->
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+
+    <title>Agregar usuario(s)</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="{% static 'app/images/agregar.png' %}" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Slysheet -->
+    <link rel="stylesheet" href="{% static 'app/css/me.css' %}">
+
+    <style>
+        .bg {
+            background-image: url({% static 'app/images/agregar_prod.jpg' %});
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-light bg-light fw-bold">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index-log' %}">
+                <img src="{% static 'app/images/logo-removebg-preview.png' %}" alt="" width="40" height="34"
+                    class="d-inline-block align-text-top">
+                Fundacion COG
+            </a>
+        </div>
+    </nav>
+
+
+    <div class="container w-75 mt-5 rounded shadow">
+        {% load crispy_forms_tags %}
+        <!-- Parte izquierda del container -->
+        <div class="row align-items-stretch">
+            <div class="col bg d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded">
+            </div>
+
+            <!-- Parte derecha del container -->
+            <div class="col p-5 rounded-end">
+                <div class="text-end">
+                    <a href="{% url 'index-log' %}"><img src="{% static 'app/images/logo.png' %}" width="48" alt=""></a>
+                </div>
+
+                <h2 class="fw-bold text-center pt-5">Agregar usuario(s)</h2>
+                <hr class="mb-5">
+
+                <form action="" method="POST" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+             
+                    <div class="table-responsive">
+                        <table>
+                            {{ form | crispy }}
+                            <hr>
+                        </table>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <input type="submit" class="btn btn-success" value="Agregar usuario">
+                    </div>
+                </form>
+
+                {{mensaje}}
+
+            </div>
+        </div>
+    </div>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

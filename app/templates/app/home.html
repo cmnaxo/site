@@ -1,0 +1,240 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+
+
+
+{% block js %}
+<script src="{% static 'app/js/core.min.js' %}"></script>
+<script src="{% static 'app/js/script.js' %}"></script>
+{% endblock %}
+
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'app/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'app/css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+{% endblock %}
+
+
+
+{% block navb %}
+<!-- RD Navbar-->
+<div class="rd-navbar-wrap">
+    <nav class="rd-navbar rd-navbar-creative" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed"
+        data-sm-device-layout="rd-navbar-fixed" data-md-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fixed"
+        data-lg-device-layout="rd-navbar-fixed" data-lg-layout="rd-navbar-fullwidth"
+        data-xl-device-layout="rd-navbar-fullwidth" data-xl-layout="rd-navbar-fullwidth"
+        data-xxl-device-layout="rd-navbar-fullwidth" data-xxl-layout="rd-navbar-fullwidth" data-stick-up-clone="false"
+        data-md-stick-up-offset="150px" data-lg-stick-up-offset="60px" data-md-stick-up="true" data-lg-stick-up="true">
+        <div class="rd-navbar-main-outer">
+            <div class="rd-navbar-main">
+                <!-- RD Navbar Panel-->
+                <div class="rd-navbar-panel">
+                    <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
+                    <!-- RD Navbar Brand-->
+                    <div class="rd-navbar-brand"><a class="brand" href="index">
+                            <div class="brand__name"><img src="{% static 'app/images/logo.jpg' %}" alt="" width="190"
+                                    height="50" />
+                            </div>
+                        </a></div>
+                </div>
+                <!-- RD Navbar Nav-->
+                <div class="rd-navbar-nav-wrap">
+                    <div class="rd-navbar-main-item"><a class="button button-xs button-lighter" href="login">Iniciar
+                            sesión</a></div>
+                    <!-- RD Navbar Nav-->
+                    <ul class="rd-navbar-nav">
+                        <li class="active"><a href="index">Inicio</a>
+                        </li>
+                        <li><a href="about-us">Quiénes somos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+
+
+{% block swiper %}
+<div class="swiper-container swiper-slider swiper-slider_height-1" data-loop="true" data-autoplay="4200"
+    data-simulate-touch="false" data-additional-slides="0" data-custom-prev="#swiper-prev"
+    data-custom-next="#swiper-next" data-custom-slide-effect="interLeaveEffect">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide bg-gray-dark">
+            <div class="slide-inner" style="background-image: url({% static 'app/images/adopta.png' %});">
+                <div class="swiper-slide-caption">
+                    <div class="container">
+                        <h1 data-caption-animate="fadeInUpSmall">Ayúdanos a generar fondos</h1>
+                        <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall"
+                            data-caption-delay="300">Puedes ayudarnos a recaudar fondos mediante la compra de nuestros
+                            productos
+                            o con la suscripción mensual.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide bg-gray-dark">
+            <div class="slide-inner" style="background-image: url({% static 'app/images/donacion.jpg' %});">
+                <div class="swiper-slide-caption">
+                    <div class="container">
+                        <h1 data-caption-animate="fadeInUpSmall">¿Deseas donar?</h1>
+                        <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall"
+                            data-caption-delay="300">Nuestro sistema de donación posee la mayor cantidad de opciones
+                            posibles;
+                            desde efectivo hasta tarjetas y/o giftcards.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-slide bg-gray-dark">
+            <div class="slide-inner" style="background-image: url({% static 'app/images/pets.jpg' %});">
+                <div class="swiper-slide-caption">
+                    <div class="container tw-bold">
+                        <h1 data-caption-animate="fadeInUpSmall">Beneficios</h1>
+                        <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall"
+                            data-caption-delay="300">En caso de haber accedido a la suscripción de nuestra fundación,
+                            esta la
+                            otorgará un 5% de descuento en todos los productos disponibles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Swiper pagination-->
+    <div class="swiper-pagination"></div>
+    <!-- Swiper Navigation-->
+    <div class="swiper-button-prev"><span>Prev</span></div>
+    <div class="swiper-button-next"><span>Next</span></div>
+</div>
+{% endblock %}
+
+
+
+{% block animales %}
+<h2>Productos especializados en</h2>
+<div class="row row-70 row-lg-110 row-offset-1">
+    <div class="col-lg-6"><a class="collection" href="#">
+            <div class="collection-img"><img src="{% static 'app/images/gato.jpg' %}" alt="" width="470" height="303" />
+            </div>
+            <h4 class="collection-title">Gatos</h4>
+        </a>
+    </div>
+    <div class="col-lg-6"><a class="collection" href="#">
+            <div class="collection-img"><img src="{% static 'app/images/perro.jpg' %}" alt="" width="470"
+                    height="303" />
+            </div>
+            <h4 class="collection-title">Perros</h4>
+        </a>
+    </div>
+    <div class="col-lg-6"><a class="collection" href="#">
+            <div class="collection-img"><img src="{% static 'app/images/huron.jpg' %}" alt="" width="470"
+                    height="303" />
+            </div>
+            <h4 class="collection-title">Hurones</h4>
+        </a>
+    </div>
+    <div class="col-lg-6"><a class="collection" href="#">
+            <div class="collection-img"><img src="{% static 'app/images/conejo.jpg' %}" alt="" width="470"
+                    height="303" />
+            </div>
+            <h4 class="collection-title">Otros</h4>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block us %}
+<div class="row row-50 justify-content-md-center justify-content-lg-between align-items-lg-center">
+    <div class="col-md-10 col-lg-6 col-xl-5 wow fadeInLeftSmall">
+        <div class="block-wrap-1">
+            <h2>Quiénes somos</h2>
+            <p>Actualmente somos una fundación dedicada a la venta de productos para ayudar animales en
+                situación de
+                calle. Realizamos el comercio de distintos productos tales como alimentos, accesorios y
+                más. También
+                recaudamos dinero a través de donaciones, las cuales se pueden realizar mediante la
+                suscripción a
+                nuestra fundación o directamente donando un monto a voluntad.</p><a class="button button-darker"
+                href="about-us">leer más</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% load humanize %}
+{% block prod %}
+<div class="isotope-wrap isotope-modern-wrap">
+    <!-- Section Header-->
+    <div class="section__header">
+        <h2>Más vendidos</h2>
+        <div class="section__header-element"></div>
+    </div>
+    <div class="isotope" data-isotope-layout="fitRows" data-isotope-group="products">
+        <div class="row row-offset-2">
+
+            {% for aux in listaProductos %}
+            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
+                <!-- Product-->
+                <article class="product">
+                    <a class="product__image-wrap" href="#">
+                        {% if aux.imagen %}
+                        <img class="product__image" src="{{ aux.imagen.url }}" alt="" width="210" height="200" />
+                        {% else %}
+                        <img src="product_image" src="{% static 'app/images/defecto.png' %}" alt="" width="210"
+                            height="200">
+                        {% endif %}
+                    </a>
+                    <div class="product__main">
+                        <p class="product__title"><a href="#">{{ aux.nombre | title }}</a></p>
+                        <p class="product__price mt-1">{{ aux.precio | intcomma }}</p>
+                        <p class="product__price">{{ aux.stock }}</p>
+                    </div>
+                    <div class="product__footer"><a class="button button-xs button-gray-2" href="#">detalles</a></div>
+                </article>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block foot %}
+<div class="footer-classic__main">
+    <ul class="list-nav-bordered">
+        <li><a href="{% url 'home' %}">Inicio</a></li>
+        <li><a href="{% url 'about-us' %}">Nosotros</a>
+    </ul>
+</div>
+<div class="divider"></div>
+<div class="footer-classic__aside">
+    <div class="row row-20">
+        <div class="col-md-6 text-md-left">
+            <!-- Rights-->
+            <p class="rights"><span>Fundación Cog</span><span>&nbsp;&copy;&nbsp;</span><span
+                    class="copyright-year"></span>. Todos los Derechos Reservados.</p>
+        </div>
+        <div class="col-md-6 text-md-right">
+            <ul class="list-inline-xxs">
+                <li>
+                    <p>Síguenos</p>
+                </li>
+                <li><a class="icon icon-xs icon-style-modern fa fa-facebook" href="#"></a></li>
+                <li><a class="icon icon-xs icon-style-modern fa fa-twitter" href="#"></a></li>
+                <li><a class="icon icon-xs icon-style-modern fa fa-instagram" href="#"></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

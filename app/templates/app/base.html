@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="wide wow-animation" lang="en">
+
+{% load static %}
+
+<head>
+    <!-- Site Title-->
+    <title>Inicio</title>
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+
+    <link rel="icon" href="{% static 'app/images/no_log-removebg-preview.png' %}" type="image/x-icon">
+
+    <!-- Stylesheets-->
+    <link rel="stylesheet" type="text/css"
+        href="//fonts.googleapis.com/css?family=Lato:300,400,700%7CRoboto:400,500,700">
+
+
+    {% block css %}
+    {% endblock %}
+
+    <style>
+        .ie-panel {
+            display: none;
+            background: #212121;
+            padding: 10px 0;
+            box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, .3);
+            clear: both;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        html.ie-10 .ie-panel,
+        html.lt-ie-10 .ie-panel {
+            display: block;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="ie-panel"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img
+                src="images/ie8-panel/warning_bar_0000_us.jpg" height="42" width="820"
+                alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a>
+    </div>
+
+    <!-- Page Loader-->
+    <div class="preloader" id="preloader">
+        <div class="page-loader-logo">
+            <div class="brand">
+                <div class="brand__name"><img src="{% static 'app/images/logo.jpg' %}" alt="" width="190" height="50" />
+                </div>
+            </div>
+        </div>
+        <div class="page-loader-body">
+            <div id="loadingProgressG">
+                <div class="loadingProgressG" id="loadingProgressG_1"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page-->
+    <div class="page">
+        <header class="page-header section">
+            {% block navb %}
+            {% endblock %}
+        </header>
+
+        <!-- BLOCK Deslizador (Swiper) -->
+        <section class="section swiper-slider_style-3 swiper-buttons-alternate">
+
+            {% block swiper %}
+
+            {% endblock %}
+
+        </section>
+
+        <!-- BLOCK Animales -->
+        <section class="section section-md bg-default text-center">
+            <div class="container">
+                {% block animales %}
+                {% endblock %}
+            </div>
+        </section>
+
+        <!-- BLOCK Quiénes somos -->
+        <section class="section section-md bg-gray-4">
+            <div class="container">
+                {% block us %}
+                {% endblock %}
+            </div>
+        </section>
+
+        <!-- Mas vendidos -->
+        {% load humanize %}
+        <section class="section section-md bg-default text-center">
+            <div class="container">
+                {% block prod %}
+                {% endblock %}
+            </div>
+        </section>
+
+        <!-- BLOCK Footer -->
+        <footer class="footer-classic bg-gray-8">
+            <div class="container">
+
+                {% block foot %}
+
+                {% endblock %}
+
+            </div>
+        </footer>
+    </div>
+
+    <!-- Global Mailform Output-->
+    <div class="snackbars" id="form-output-global"></div>
+    <!-- Javascript-->
+
+    {% block js %}
+    {% endblock %}
+
+</body>
+
+</html>

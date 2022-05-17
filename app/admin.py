@@ -11,7 +11,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_per_page = 5
 
 class RegistroAdmin(admin.ModelAdmin):
-    list_display = ['cod_registro', 'correo', 'contraseña', 'confirmar_contraseña', 'created_at', 'updated_at']
+    list_display = ['cod_registro', 'correo', 'contraseña', 'created_at', 'updated_at']
     search_fields = ['cod_registro', 'correo']
     list_editable = ['correo', 'contraseña']
     list_filter = ['created_at']

@@ -16,7 +16,7 @@ class RegistroForm(forms.ModelForm):
 
     class Meta:
         model = Registro
-        fields = ['correo', 'contraseña', 'confirmar_contraseña']
+        fields = ['correo', 'contraseña']
 
 class UsuarioForm(forms.ModelForm):
 

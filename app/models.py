@@ -39,7 +39,6 @@ class Registro(models.Model):
     cod_registro = models.IntegerField(null=False, primary_key=True)
     correo = models.EmailField()
     contraseña = models.CharField(max_length=20)
-    confirmar_contraseña = models.CharField(max_length=20)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 

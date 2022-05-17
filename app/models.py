@@ -35,10 +35,24 @@ op_user = [
     [1, "Suscrito"]
 ]
 
+class Registro(models.Model):
+    cod_registro = models.IntegerField(null=False, primary_key=True)
+    correo = models.EmailField()
+    contraseña = models.CharField(max_length=20)
+    confirmar_contraseña = models.CharField(max_length=20)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.primer_nombre
+
+    class Meta:
+        db_table = 'db_registro'
+
 class Usuario(models.Model):
     cod_usuario = models.IntegerField(null=False, primary_key=True)
-    primer_nombre = models.CharField(max_length=20)
-    primer_apellido = models.CharField(max_length=20)
+    primer_nombre = models.CharField(max_length=30)
+    primer_apellido = models.CharField(max_length=30)
     correo = models.EmailField()
     tipo_usuario = models.IntegerField(choices=op_user)
     imagen = models.ImageField(upload_to="suscritos", null=True)
@@ -46,10 +60,17 @@ class Usuario(models.Model):
     updated_at = models.DateField(auto_now=True)
 
     def __str__(self):
-        return self.primer_nombre, self.primer_apellido
+        return self.primer_nombre
 
     class Meta:
         db_table = 'db_usuario'
+
+class Sesion(models.Model):
+    cod_log = models.IntegerField(null=False, primary_key=True)
+    correo = models.EmailField()
+    contraseña = models.CharField(max_length=20)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
 class ItemsCarro(models.Model):
     nombre_producto = models.CharField(max_length=60)
@@ -61,3 +82,7 @@ class ItemsCarro(models.Model):
 
     class Meta:
         db_table = 'db_items_carro'
+
+
+
+

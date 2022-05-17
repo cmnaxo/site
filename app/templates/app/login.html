@@ -27,6 +27,7 @@
 
 <body>
 
+    {% load crispy_forms_tags %}
     <div class="container w-75 mt-5 rounded shadow">
         <div class="row align-items-stretch">
             <div class="col bg d-none d-lg-block col-md-5 col-lg-5 col-xl-6 rounded">
@@ -39,18 +40,14 @@
                 <h2 class="fw-bold text-center py-5">Bienvenido</h2>
 
                 <!-- Login -->
-                <form action="#">
-                    <div class="mb-4">
-                        <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" name="email" placeholder="k.hills@gmail.com">
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" name="password" placeholder="Aleatorio123">
-                    </div>
-                    <div class="mb-4 form-check">
-                        <input type="checkbox" name="connected" class="form-check-input" id="">
-                        <label for="connected" class="form-check-label">Mantener sesión</label>
+                <form action="#" method="POST" enctype="multipart/form-data">
+                    
+                    {% csrf_token %}
+
+                    <div class="table-responsive">
+                        <table class="my-3">
+                            {{ form | crispy }}
+                        </table>
                     </div>
 
                     <!-- Para que el botón se expanda al ancho de la pagina -->

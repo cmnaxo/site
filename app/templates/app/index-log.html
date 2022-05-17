@@ -106,12 +106,15 @@
           </div>
           <div class="product__footer">
             <form action="" method="POST">
+              
               {% csrf_token %}
+
               <input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
               <input type="hidden" name="nombre_producto" id="nombre_producto" value="{{ aux.nombre | title }}">
               <input type="hidden" name="precio_producto" id="precio_producto" value="{{ aux.precio }}">
               <input type="submit" style="cursor: pointer;" class="button button-xs button-gray-2"
                 value="Agregar al carro">
+                
             </form>
           </div>
         </article>

@@ -119,28 +119,37 @@ def indexLog(request):
 
     return render(request, 'app/index-log.html', datos)
 
-def agregar_producto(request):
-    datos = {
-        'form': ProductoForm()
-    }
-    if request.method == 'POST':
-        formulario = ProductoForm(request.POST, files=request.FILES)
-        if formulario.is_valid():
-            formulario.save()
-            datos['mensaje'] = "Producto agregado correctamente!"
-        else:
-            datos['form'] = formulario
-
-    return render(request, 'app/productos/agregar_producto.html', datos)
-
 def login(request):
-    return render(request, 'app/login.html')
+    datos = {
+        'form': SesionForm()
+    }
+
+    return render(request, 'app/login.html', datos)
 
 def products(request):
-    return render(request, 'app/products.html')
+    productosAll = Producto.objects.all()
+    
+    #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
+    datos = {
+        'listaProductos' : productosAll
+    }
+    
+    if request.method == 'POST':
+        carro = ItemsCarro()
+        #Rellenamos el carro con los datos que vienen de POST
+        carro.imagen = request.POST.get('imagen')
+        carro.nombre_producto = request.POST.get('nombre_producto')
+        carro.precio_producto = request.POST.get('precio_producto')
+        carro.save()
+
+    return render(request, 'app/products.html', datos)
 
 def register(request):
-    return render(request, 'app/register.html')
+    datos = {
+        'form': RegistroForm()
+    }
+
+    return render(request, 'app/register.html', datos)
 
 def suscribe(request):
     usuarioAll = Usuario.objects.all()

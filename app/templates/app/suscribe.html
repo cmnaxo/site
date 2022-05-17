@@ -172,40 +172,24 @@
         </div>
         <!-- Perfiles del equipo -->
         <div class="row row-30">
+
+          {% for aux in listaUsuarios %}
+          {% if aux.tipo_usuario == 1 %}
           <div class="col-md-6 col-lg-4">
             <!-- Profile creative-->
             <article class="profile-creative">
-              <div class="profile-creative__header"><img src="{% static 'app/images/sub_1.png' %}" alt="" width="115" height="119" />
+              {% if aux.imagen %}
+              <div class="profile-creative__header"><img src="{{ aux.imagen.url }}" alt="" width="115" height="119" />
               </div>
+              {% endif %}
               <div class="profile-creative__main" data-fixed-height="">
-                <p class="profile-creative__title">Steven Neal</p>
-                <p class="profile-creative__subtitle">Suscrito hace 3 meses</p>
-              </div>
+                <p class="profile-creative__title">{{ aux.primer_nombre }} {{ aux.primer_apellido }}</p>
+                <p class="profile-creative__subtitle">Suscrito desde el {{ aux.created_at }}</p>
+              </div>  
             </article>
           </div>
-          <div class="col-md-6 col-lg-4">
-            <!-- Profile creative-->
-            <article class="profile-creative">
-              <div class="profile-creative__header"><img src="{% static 'app/images/sub_2.png' %}" alt="" width="115" height="119" />
-              </div>
-              <div class="profile-creative__main" data-fixed-height="">
-                <p class="profile-creative__title">Elizabeth Jacobson</p>
-                <p class="profile-creative__subtitle">Suscrita hace 2 semanas</p>
-              </div>
-            </article>
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <!-- Profile creative-->
-            <article class="profile-creative">
-              <div class="profile-creative__header"><img src="{% static 'app/images/sub_3.png' %}" alt="" width="115"
-                  height="119" />
-              </div>
-              <div class="profile-creative__main" data-fixed-height="">
-                <p class="profile-creative__title">Jessie Chels</p>
-                <p class="profile-creative__subtitle">Suscrita hace 5 minutos</p>
-              </div>
-            </article>
-          </div>
+          {% endif %}
+          {% endfor %}
         </div>
       </div>
     </section>

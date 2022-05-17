@@ -126,231 +126,36 @@
                     </div>
                     <div class="isotope" data-isotope-layout="fitRows" data-isotope-group="products">
                         <div class="row row-offset-2">
+                            {% for aux in listaProductos %}
                             <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
                                 <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image"
-                                            src="{% static 'app/images/one-comida-para-gatos.png' %}" alt="" width="210"
+                                <article class="product"> <a class="product__image-wrap" href="#">
+                                        {% if aux.imagen %}
+                                        <img class="product__image" src="{{ aux.imagen.url }}" alt="" width="210"
                                             height="200" /></a>
+                                    {% endif %}
                                     <div class="product__main">
-                                        <p class="product__title"><a href="#">Purina One - Pollo</a></p>
-                                        <p class="product__price mt-2">$39.990</p>
-                                        <p class="product__price">Stock: 3</p>
+                                        <p class="product__title"><a href="#">{{ aux.nombre }}</a></p>
+                                        <p class="product__price mt-2">{{ aux.precio }}</p>
+                                        <p class="product__price">{{ aux.stock }}</p>
                                     </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
+                                    <div class="product__footer">
+                                        <form action="" method="POST">
+                                          
+                                          {% csrf_token %}
+                            
+                                          <input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+                                          <input type="hidden" name="nombre_producto" id="nombre_producto" value="{{ aux.nombre | title }}">
+                                          <input type="hidden" name="precio_producto" id="precio_producto" value="{{ aux.precio }}">
+                                          <input type="submit" style="cursor: pointer;" class="button button-xs button-gray-2"
+                                            value="Agregar al carro">
+                                            
+                                        </form>
+                                      </div>
                                 </article>
                             </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/royal-canin.png' %}"
-                                            alt="" width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Royal Canin - Carne</a></p>
-                                        <p class="product__price mt-2">$44.990</p>
-                                        <p class="product__price">Stock: 5</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/fit-formula.png' %}"
-                                            alt="" width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Fit Formula - Carne</a></p>
-                                        <p class="product__price mt-2">$39.990</p>
-                                        <p class="product__price">Stock: 1</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/nutram.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Nutram - Sin grano</a></p>
-                                        <p class="product__price mt-2">$42.990</p>
-                                        <p class="product__price">Stock: 7</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/chapa.png' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Identificación QR</a></p>
-                                        <p class="product__price mt-2">$15.990</p>
-                                        <p class="product__price">Stock: 0</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/placa1.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Identificación QR</a></p>
-                                        <p class="product__price mt-2">$17.990</p>
-                                        <p class="product__price">Stock: 2</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/placa3.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Identificación Normal</a></p>
-                                        <p class="product__price mt-2">$9.990</p>
-                                        <p class="product__price">Stock: 5</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product -->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/placa2.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Identificación Normal</a></p>
-                                        <p class="product__price mt-2">$9.990</p>
-                                        <p class="product__price">Stock: 5</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/correa_1.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#"> Arnés y correa gato</a></p>
-                                        <p class="product__price mt-2">$16.990</p>
-                                        <p class="product__price">Stock: 5</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/correa_2.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Arnés y correa gato</a></p>
-                                        <p class="product__price mt-2">$16.990</p>
-                                        <p class="product__price">Stock: 3</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/correa_3.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Correa rosada perro</a></p>
-                                        <p class="product__price mt-2">$15.990</p>
-                                        <p class="product__price">Stock: 8</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/correa_4.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Correa záfiro perro</a></p>
-                                        <p class="product__price mt-2">$18.990</p>
-                                        <p class="product__price">Stock: 2</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/bandana_1.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Bandana - Talla S</a></p>
-                                        <p class="product__price mt-2">$10.490</p>
-                                        <p class="product__price">Stock: 6</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/bandana_2.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Bandana - Talla M</a></p>
-                                        <p class="product__price mt-2">$8.090</p>
-                                        <p class="product__price">Stock: 1</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/bandana_3.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Bandana - Talla S</a></p>
-                                        <p class="product__price mt-2">$13.290</p>
-                                        <p class="product__price">Stock: 7</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
-                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 2">
-                                <!-- Product-->
-                                <article class="product"> <a class="product__image-wrap" href="#"><img
-                                            class="product__image" src="{% static 'app/images/bandana_4.jpg' %}" alt=""
-                                            width="210" height="200" /></a>
-                                    <div class="product__main">
-                                        <p class="product__title"><a href="#">Bandana - Talla M</a></p>
-                                        <p class="product__price mt-2">$12.590</p>
-                                        <p class="product__price">Stock: 5</p>
-                                    </div>
-                                    <div class="product__footer"><a class="button button-xs button-gray-2"
-                                            href="#">Agregar al carro</a></div>
-                                </article>
-                            </div>
+                            {% endfor %}
+
                         </div>
                     </div>
                 </div>

@@ -144,7 +144,7 @@
                         <div class="d-inline-blockr">
                             {% for aux in listaCarro %}
                             <div class="col-12"> 
-                                <img src="{{ aux.imagen.url }}" width="142" height="30" alt="">
+                                <img src="{{ aux.imagen.url }}" class="py-5" width="142" height="30" alt="">
                                 <div class="mt-2">
                                     <br>
                                     <b>Producto:</b> {{ aux.nombre_producto }}
@@ -165,8 +165,7 @@
                                 <h2 class="card-title">Resumen de la compra</h2>
                                 <p class="card-text my-5">El producto no viene con costo de envío incluido.
                                     <br>
-                                <p class="mt-1">Precio original: </p><b><strike style="color: red">{{ aux.precio_producto }}</strike></b>
-                                <p class="mt-1">Precio oferta:  </p>
+                                <p class="mt-1">Precio original: </p><b>{{ aux.precio_producto }}</b>
                                 </p>
 
                                 <a href="{% url 'despacho' %}" class="btn btn-dark">Ir al despacho</a>

@@ -14,6 +14,7 @@ urlpatterns = [
     path('login/', login, name = "login"),
     path('products/', products, name = "products"),
     path('register/', register, name = "register"),
+    path('registro/', registro, name = "registro"),
     path('suscribe/', suscribe, name = "suscribe"),
     path('success/', success, name = "success"),
     path('agregar_producto/', agregar_producto, name = "agregar_producto"),

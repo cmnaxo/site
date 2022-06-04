@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from app.forms import ProductoForm
 from .models import *
 
 # Register your models here.
@@ -9,6 +11,9 @@ class ProductoAdmin(admin.ModelAdmin):
     list_editable = ['precio']
     list_filter = ['tipo', 'imagen']
     list_per_page = 5
+
+    #El admin ocupa las validaciones de nuestro formulario
+    form = ProductoForm
 
 class RegistroAdmin(admin.ModelAdmin):
     list_display = ['cod_registro', 'correo', 'contraseña', 'created_at', 'updated_at']

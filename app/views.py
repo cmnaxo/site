@@ -5,6 +5,8 @@ from requests import request
 from .forms import *
 from .models import *
 from app.models import Producto
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, permission_required
 
 #El view se comporta como un controlador.
 #Conecta con el modelo.
@@ -20,6 +22,7 @@ def home(request):
 
     return render(request, 'app/home.html', datos)
 
+@permission_required('app.add_producto')
 #CRUD Seccion > Agregar (CREATE)
 def agregar_producto(request):
     datos = {
@@ -35,6 +38,7 @@ def agregar_producto(request):
 
     return render(request, 'app/productos/agregar_producto.html', datos)
 
+@permission_required('app.change_producto')
 #CRUD Seccion > Modificar (UPDATE)
 def modificarProducto(request, cod):
     producto = Producto.objects.get(cod=cod)
@@ -51,6 +55,7 @@ def modificarProducto(request, cod):
     
     return render(request, 'app/productos/modificarProducto.html', datos)
 
+@permission_required('app.view_producto')
 #CRUD Seccion > Leer (READ)
 def listarProductos(request):
     productosAll = Producto.objects.all()
@@ -62,6 +67,7 @@ def listarProductos(request):
 
     return render(request, 'app/productos/listarProductos.html', datos)
 
+@permission_required('app.delete_producto')
 #CRUD Seccion > Delete ()
 def eliminarProducto(request, cod):
     producto = Producto.objects.get(cod=cod)
@@ -150,6 +156,20 @@ def register(request):
     }
 
     return render(request, 'app/register.html', datos)
+
+def registro(request):
+    datos = {
+        'form' : RegistroUserForm()
+    }
+
+    if request.method == 'POST':
+        formulario = RegistroUserForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="index-log")
+        datos["form"] = formulario
+
+    return render(request, 'registration/registro.html', datos)
 
 def suscribe(request):
     usuarioAll = Usuario.objects.all()

@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:
@@ -29,7 +30,7 @@ if settings.DEBUG:
 
 
 #Configuraciones de la sección de admin
-admin.site.site_title = "Tienda"
+admin.site.site_title = "Fundacion COG"
 admin.site.site_header = "Administración de la Tienda"
 admin.site.index_title = "Módulo de Administración"
 

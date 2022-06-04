@@ -5,7 +5,7 @@
 
 <head>
 
-    <title>Inicio de sesión</title>
+    <title>Registro de usuario</title>
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,8 +18,9 @@
 
     <style>
         .bg {
-            background-image: url({% static 'app/images/login_logo.jpg' %});
+            background-image: url({% static 'app/images/logo-icon2.png' %});
             background-position: center center;
+            background-repeat: no-repeat;
         }
     </style>
 
@@ -37,26 +38,24 @@
                     <a href="{% url 'home' %}"><img src="{% static 'app/images/logo.png' %}" width="48" alt=""></a>
                 </div>
 
-                <h2 class="fw-bold text-center py-5">Bienvenido</h2>
+                <h2 class="fw-bold text-center py-5">¿Nuevo usuario?</h2>
+                <hr>
 
                 <!-- Login -->
                 <form action="#" method="POST" enctype="multipart/form-data">
-                    
+
                     {% csrf_token %}
 
                     <div class="table-responsive">
                         <table class="my-3">
                             {{ form | crispy }}
+                            <hr>
                         </table>
                     </div>
 
                     <!-- Para que el botón se expanda al ancho de la pagina -->
-                    <div class="d-grid">
-                        <a href="{% url 'index-log' %}" class="btn btn-primary">Iniciar sesion</a>
-                    </div>
-
-                    <div class="my-3">
-                        <span>¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate</a> </span>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-block">Crear cuenta</a></button>
                     </div>
                 </form>
 
@@ -64,7 +63,7 @@
                 <div class="container w-100 my-5">
                     <div class="row text-center">
                         <div class="col-12 mb-1">
-                            Iniciar sesión con
+                            Crea tu cuenta con
                         </div>
                     </div>
                     <div class="row">

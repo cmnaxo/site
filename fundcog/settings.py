@@ -138,3 +138,6 @@ import os
 
 MEDIA_URL = '/media/' #Cuando estan guardadas
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #Cuando vamos a guardar
+
+LOGIN_REDIRECT_URL = 'index-log' #PARA CUANDO INICIA SESION
+LOGOUT_REDIRECT_URL = 'home' #PARA CUANDO CIERRA SESION

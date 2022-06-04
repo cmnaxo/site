@@ -110,10 +110,14 @@
                                 <td>{{ aux.created_at }}</td>
                                 <td class="align-top">
                                     <div class="d-grid gap-2">
+                                        {% if perms.app.change_producto %}
                                         <a href="{% url 'modificarProducto' aux.cod %}"
                                             class="btn btn-info my-2 mx-2">Modificar</a>
+                                        {% endif %}
+                                        {% if perms.app.delete_producto %}
                                         <a href="#" onclick="eliminarProducto({{ aux.cod }})"
                                             class="btn btn-danger my-2 mx-2">Eliminar</a>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>

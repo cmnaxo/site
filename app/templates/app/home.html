@@ -42,13 +42,13 @@
                 </div>
                 <!-- RD Navbar Nav-->
                 <div class="rd-navbar-nav-wrap">
-                    <div class="rd-navbar-main-item"><a class="button button-xs button-lighter" href="login">Iniciar
+                    <div class="rd-navbar-main-item"><a class="button button-xs button-lighter" href="{% url 'login' %}">Iniciar
                             sesión</a></div>
                     <!-- RD Navbar Nav-->
                     <ul class="rd-navbar-nav">
-                        <li class="active"><a href="index">Inicio</a>
+                        <li class="active"><a href="{% url 'home' %}">Inicio</a>
                         </li>
-                        <li><a href="about-us">Quiénes somos</a>
+                        <li><a href="{% url 'about-us' %}">Quiénes somos</a>
                         </li>
                     </ul>
                 </div>

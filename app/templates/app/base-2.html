@@ -82,28 +82,38 @@
                                     data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
                                 <!-- RD Navbar Brand-->
                                 <div class="rd-navbar-brand"><a class="brand" href="{% url 'index-log' %}">
-                                        <div class="brand__name"><img src="{% static 'app/images/logo.jpg' %}" alt="" width="190"
-                                                height="50" />
+                                        <div class="brand__name"><img src="{% static 'app/images/logo.jpg' %}" alt=""
+                                                width="190" height="50" />
                                         </div>
                                     </a></div>
                             </div>
                             <!-- RD Navbar Nav-->
                             <div class="rd-navbar-nav-wrap">
+                                {% if user.is_authenticated %}
                                 <div class="rd-navbar-main-item"><a class="button button-xs button-lighter"
                                         href="{% url 'suscribe' %}">Suscribirse</a>
                                 </div>
+                                {% endif %}
 
+                                {% if user.is_authenticated %}
                                 <div class="rd-navbar-main-item"><a class="button button-xs button-lighter mx-4"
-                                        href="/">Cerrar sesión</a>
+                                        href="{% url 'logout' %}">Cerrar sesión</a>
                                 </div>
+                                {% endif %}
+
                                 <!-- RD Navbar Nav-->
                                 <ul class="rd-navbar-nav">
+                                    {% if user.is_authenticated %}
+                                    <li>Bienvenido <b>{{ user.username }}</b></li>
+                                    {% endif %}
                                     <li class="active"><a href="{% url 'index-log' %}">Inicio</a>
-                                    </li>
-                                    <li><a href="{% url 'about-us' %}">Quiénes somos</a>
                                     </li>
                                     <li><a href="{% url 'products' %}">Productos</a>
                                     </li>
+                                    {% if user.is_staff == 1 %}
+                                    <li><a href="http://127.0.0.1:8000/admin/">Administración</a>
+                                    </li>
+                                    {% endif %}
                                     <li><a href="{% url 'cart' %}"><i class="icon-sm fa-solid fa-cart-shopping"></i></a>
                                     </li>
                                 </ul>
@@ -116,7 +126,7 @@
 
         <!-- BLOCK-log Deslizador (Swiper) -->
         <section class="section swiper-slider_style-3 swiper-buttons-alternate">
-            
+
             {% block swiper-log %}
 
             {% endblock %}
@@ -129,25 +139,29 @@
                 <h2>Productos especializados en</h2>
                 <div class="row row-70 row-lg-110 row-offset-1">
                     <div class="col-lg-6"><a class="collection" href="#">
-                            <div class="collection-img"><img src="{% static 'app/images/gato.jpg' %}" alt="" width="470" height="303" />
+                            <div class="collection-img"><img src="{% static 'app/images/gato.jpg' %}" alt="" width="470"
+                                    height="303" />
                             </div>
                             <h4 class="collection-title">Gatos</h4>
                         </a>
                     </div>
                     <div class="col-lg-6"><a class="collection" href="#">
-                            <div class="collection-img"><img src="{% static 'app/images/perro.jpg' %}" alt="" width="470" height="303" />
+                            <div class="collection-img"><img src="{% static 'app/images/perro.jpg' %}" alt=""
+                                    width="470" height="303" />
                             </div>
                             <h4 class="collection-title">Perros</h4>
                         </a>
                     </div>
                     <div class="col-lg-6"><a class="collection" href="#">
-                            <div class="collection-img"><img src="{% static 'app/images/huron.jpg' %}" alt="" width="470" height="303" />
+                            <div class="collection-img"><img src="{% static 'app/images/huron.jpg' %}" alt=""
+                                    width="470" height="303" />
                             </div>
                             <h4 class="collection-title">Hurones</h4>
                         </a>
                     </div>
                     <div class="col-lg-6"><a class="collection" href="#">
-                            <div class="collection-img"><img src="{% static 'app/images/conejo.jpg' %}" alt="" width="470" height="303" />
+                            <div class="collection-img"><img src="{% static 'app/images/conejo.jpg' %}" alt=""
+                                    width="470" height="303" />
                             </div>
                             <h4 class="collection-title">Otros</h4>
                         </a>
@@ -188,7 +202,7 @@
         <!-- BLOCK-LOG Footer -->
         <footer class="footer-classic bg-gray-8">
             <div class="container">
-                
+
                 {% block foot-log %}
 
                 {% endblock %}

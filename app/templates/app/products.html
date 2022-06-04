@@ -100,8 +100,16 @@
                                 <ul class="rd-navbar-nav">
                                     <li><a href="{% url 'index-log' %}">Inicio</a>
                                     </li>
-                                    <li><a href="{% url 'about-us' %}">Quiénes somos</a>
+                                    {% if perms.app.add_producto %}
+                                    <li>
+                                        <a href="{% url 'agregar_producto' %}">Agregar producto(s)</a>
                                     </li>
+                                    {% endif %}
+                                    {% if perms.app.view_producto %}
+                                    <li>
+                                        <a href="{% url 'listarProductos' %}">Listar producto(s)</a>
+                                    </li>
+                                    {% endif %}
                                     <li class="active"><a href="">Productos</a>
                                     </li>
                                     <li><a href="{% url 'cart' %}"><i class="icon-sm fa-solid fa-cart-shopping"></i></a>
@@ -136,8 +144,8 @@
                                     {% endif %}
                                     <div class="product__main">
                                         <p class="product__title"><a href="#">{{ aux.nombre }}</a></p>
-                                        <p class="product__price mt-2">{{ aux.precio }}</p>
-                                        <p class="product__price">{{ aux.stock }}</p>
+                                        <p class="product__price mt-2">Valor: {{ aux.precio }}</p>
+                                        <p class="product__price">Stock: {{ aux.stock }}</p>
                                     </div>
                                     <div class="product__footer">
                                         <form action="" method="POST">

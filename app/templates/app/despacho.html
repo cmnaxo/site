@@ -62,22 +62,14 @@
                 <div>
                     <p>Región</p>
                 </div>
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Seleccione su región
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <li><a class="dropdown-item" href="#">Región Metropolitana</a></li>
-                            <li><a class="dropdown-item" href="#">Maule</a></li>
-                            <li><a class="dropdown-item" href="#">Valparaíso</a></li>
-                            <li><a class="dropdown-item" href="#">Viña del Mar</a></li>
-                            <li><a class="dropdown-item" href="#">Biobío</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <select class="form-select">
+                    <option>Seleccione su región</option>
+                    <option>Región Metropolitana</option>
+                    <option>Maule</option>
+                    <option>Valparaíso</option>
+                    <option>Viña del Mar</option>
+                    <option>Biobío</option>
+                </select>
                 <div class="mt-4">
                     <label for="text" class="form-label">Dirección del hogar</label>
                     <input type="text" class="form-control" name="text" placeholder="Elqui #348">

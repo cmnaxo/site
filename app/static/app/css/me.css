@@ -6,7 +6,7 @@
 }
 
 .button-primary:hover {
-    background: rgb(53, 48, 48);
+    background: rgb(0, 0, 0);
     color: white;
     border-radius: 12px;
 }
@@ -38,7 +38,7 @@ h2 {
 
 .btn:hover{
     background-color: rgb(28, 28, 28);
-    color: white;
+    color: rgb(212, 10, 10);
 }
 
 .btn-outline-dark{

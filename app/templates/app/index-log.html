@@ -101,8 +101,8 @@
           </a>
           <div class="product__main">
             <p class="product__title"><a href="#">{{ aux.nombre | title }}</a></p>
-            <p class="product__price mt-1">{{ aux.precio | intcomma }}</p>
-            <p class="product__price">{{ aux.stock }}</p>
+            <p class="product__price mt-1">Valor: {{ aux.precio | intcomma }}</p>
+            <p class="product__price">Stock: {{ aux.stock }}</p>
           </div>
           <div class="product__footer">
             <form action="" method="POST">

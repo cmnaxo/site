@@ -1,10 +1,11 @@
-import re
+import requests
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from requests import request
+
 from .forms import *
 from .models import *
 from app.models import Producto
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -37,6 +38,7 @@ def agregar_producto(request):
             datos['form'] = formulario
 
     return render(request, 'app/productos/agregar_producto.html', datos)
+
 
 @permission_required('app.change_producto')
 #CRUD Seccion > Modificar (UPDATE)
@@ -79,6 +81,7 @@ def eliminarProducto(request, cod):
 def aboutUs(request):
     return render(request, 'app/about-us.html')
 
+@login_required
 def cart(request):
     carro = ItemsCarro.objects.all()  
     #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
@@ -88,15 +91,18 @@ def cart(request):
 
     return render(request, 'app/cart.html', datos)
 
+@login_required
 def donation(request):
     return render(request, 'app/donation.html')
 
+@login_required
 def success(request):
     carro = ItemsCarro.objects.all()
     carro.delete()
 
     return render(request, 'app/success.html')
 
+@login_required
 def historial(request):
     carro = ItemsCarro.objects.all()
     
@@ -107,6 +113,7 @@ def historial(request):
 
     return render(request, 'app/historial.html', datos)
 
+@login_required
 def indexLog(request):
     productosAll = Producto.objects.all()
     
@@ -132,12 +139,15 @@ def login(request):
 
     return render(request, 'app/login.html', datos)
 
+@login_required
 def products(request):
     productosAll = Producto.objects.all()
+    response = requests.get('http://127.0.0.1:8000/api/productos/').json()
     
     #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
     datos = {
-        'listaProductos' : productosAll
+        'listaProductos' : productosAll,
+        'listaJson' : response,
     }
     
     if request.method == 'POST':
@@ -166,11 +176,12 @@ def registro(request):
         formulario = RegistroUserForm(request.POST)
         if formulario.is_valid():
             formulario.save()
-            return redirect(to="index-log")
+            return redirect(to="login")
         datos["form"] = formulario
 
     return render(request, 'registration/registro.html', datos)
 
+@login_required
 def suscribe(request):
     usuarioAll = Usuario.objects.all()
     
@@ -181,6 +192,7 @@ def suscribe(request):
 
     return render(request, 'app/suscribe.html', datos)
 
+@permission_required('app.add_usuario')
 #CRUD Seccion > Agregar (CREATE)
 def agregarUsuario(request):
     datos = {
@@ -196,6 +208,7 @@ def agregarUsuario(request):
 
     return render(request, 'app/usuarios/agregarUsuario.html', datos)
 
+@permission_required('app.change_usuario')
 #CRUD Seccion > Modificar (UPDATE)
 def modificarUsuario(request, cod_usuario):
     usuario = Usuario.objects.get(cod_usuario=cod_usuario)
@@ -212,6 +225,7 @@ def modificarUsuario(request, cod_usuario):
     
     return render(request, 'app/usuarios/modificarUsuario.html', datos)
 
+@permission_required('app.view_usuario')
 #CRUD Seccion > Leer (READ)
 def listarUsuario(request):
     usuarioAll = Usuario.objects.all()
@@ -223,6 +237,7 @@ def listarUsuario(request):
 
     return render(request, 'app/usuarios/listarUsuario.html', datos)
 
+@permission_required('app.delete_usuario')
 #CRUD Seccion > Delete ()
 def eliminarUsuario(request, cod_usuario):
     usuario = Usuario.objects.get(cod_usuario=cod_usuario)
@@ -231,6 +246,7 @@ def eliminarUsuario(request, cod_usuario):
 
     return redirect(to="listarUsuario")
 
+@login_required
 def despacho(request):
     return render(request, 'app/despacho.html')
 

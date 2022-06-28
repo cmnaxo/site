@@ -30,7 +30,7 @@ class UsuarioAdmin(admin.ModelAdmin):
     list_per_page = 5
 
 class CarroAdmin(admin.ModelAdmin):
-    list_display = ['nombre_producto', 'precio_producto', 'imagen']
+    list_display = ['id_prod', 'nombre_producto', 'precio_producto', 'imagen', 'cantidad', 'total']
     search_fields = ['nombre_producto']
     list_editable = ['precio_producto']
     list_filter = ['nombre_producto']
@@ -43,9 +43,17 @@ class SesionAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     list_per_page = 5
 
+class OrdenAdmin(admin.ModelAdmin):
+    list_display = ['codigo', 'articulos', 'cantidad', 'total', 'estado_pedido', 'cliente']
+    search_fields = ['codigo', 'cliente']
+    list_per_page = 5
+
 admin.site.register(TipoProducto)
 admin.site.register(Producto, ProductoAdmin)
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(ItemsCarro, CarroAdmin)
 admin.site.register(Registro, RegistroAdmin)
 admin.site.register(Sesion, SesionAdmin)
+admin.site.register(Orden, OrdenAdmin)
+admin.site.register(EstadoOrden)
+

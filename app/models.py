@@ -72,9 +72,12 @@ class Sesion(models.Model):
     updated_at = models.DateField(auto_now=True)
 
 class ItemsCarro(models.Model):
+    id_prod = models.AutoField(primary_key=True)
     nombre_producto = models.CharField(max_length=60)
     precio_producto = models.IntegerField()
     imagen = models.ImageField(upload_to="items_carro", null=True)
+    cantidad = models.IntegerField()
+    total = models.IntegerField()
 
     def __str__(self):
         return self.nombre_producto
@@ -82,6 +85,27 @@ class ItemsCarro(models.Model):
     class Meta:
         db_table = 'db_items_carro'
 
+class Orden(models.Model):
+    codigo = models.AutoField(primary_key=True)
+    articulos = models.CharField(max_length=300)
+    cantidad = models.IntegerField()
+    total = models.IntegerField()
+    estado_pedido = models.CharField(max_length=50)
+    cliente = models.CharField(max_length=30)
 
+    def __str__(self):
+        return str(self.codigo)
+    
+    class Meta:
+        db_table = 'db_orden'
+
+class EstadoOrden(models.Model):
+    estado = models.CharField(max_length=20)
+
+    def __str__(self):
+        return str(self.estado)
+    
+    class Meta:
+        db_table = 'db_estado_orden'
 
 

@@ -1,3 +1,5 @@
+from operator import le
+from urllib import response
 import requests
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -38,7 +40,6 @@ def agregar_producto(request):
             datos['form'] = formulario
 
     return render(request, 'app/productos/agregar_producto.html', datos)
-
 
 @permission_required('app.change_producto')
 #CRUD Seccion > Modificar (UPDATE)
@@ -84,12 +85,83 @@ def aboutUs(request):
 @login_required
 def cart(request):
     carro = ItemsCarro.objects.all()  
-    #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
+    accum = 0
+
+    for prod in carro:
+        prod.total = prod.precio_producto * prod.cantidad
+        prod.save()
+
+        accum += prod.total
+
+    total =  round(accum - (accum * 0.05) ) 
+    
     datos = {
-        'listaCarro' : carro
+        'listaCarro' : carro,
+        'accum' : accum,
+        'total' : total
     }
 
     return render(request, 'app/cart.html', datos)
+
+#Acumulador del carro / cantidad
+@permission_required('app.add_producto')
+def accumCart(id_prod):
+    carro = ItemsCarro.objects.get(id_prod=id_prod)
+    carro.cantidad += 1
+    carro.save()
+
+    prod = Producto.objects.get(cod = int(id_prod))
+    prod.stock -= 1
+    prod.save()
+
+    return redirect(to='cart')
+
+#CRUD Carro > Delete
+@permission_required('app.delete_producto')
+def deleteCart(id_prod):
+    carro = ItemsCarro.objects.get(id_prod=id_prod)
+    carro.cantidad -= 1
+    
+    if carro.cantidad > 0:
+        carro.save()
+
+    else:
+        carro.delete()
+
+    prod = Producto.objects.get(cod = int(id_prod))
+    prod.stock += 1
+    prod.save()
+
+    return redirect(to='cart')
+
+@permission_required('app.delete_producto')
+def rollCart(request):
+    cart = ItemsCarro.objects.all()
+
+    prodList = ""
+    
+    for prod in cart:
+        prodList = "" + prodList + prod.nombre_producto + " (" + str(prod.cantidad) + ") "
+    
+    prodCant = len(cart)
+
+    totalFinal = 0
+    for prod in cart:
+        totalFinal += prod.total
+
+    cliente = request.user.username
+
+    ordenCliente = Orden()
+    ordenCliente.articulos = prodList
+    ordenCliente.cantidad = prodCant
+    ordenCliente.total = totalFinal
+    ordenCliente.estado_pedido = "Recibida"
+    ordenCliente.cliente = cliente
+    ordenCliente.save()
+
+    cart.delete()
+
+    return redirect(to='cart')
 
 @login_required
 def donation(request):
@@ -102,13 +174,14 @@ def success(request):
 
     return render(request, 'app/success.html')
 
+#Pendiente
 @login_required
 def historial(request):
-    carro = ItemsCarro.objects.all()
     
-    #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
+    historial = Orden.objects.filter(cliente=request.user.username)
+    
     datos = {
-        'listaCarro' : carro
+        'listaOrden' : historial
     }
 
     return render(request, 'app/historial.html', datos)
@@ -116,19 +189,45 @@ def historial(request):
 @login_required
 def indexLog(request):
     productosAll = Producto.objects.all()
+
+    response = requests.get('https://rickandmortyapi.com/api/character').json()
     
     #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
     datos = {
-        'listaProductos' : productosAll
+        'listaProductos' : productosAll,
+        'listaJson' : response
     }
 
     if request.method == 'POST':
-        carro = ItemsCarro()
-        #Rellenamos el carro con los datos que vienen de POST
-        carro.imagen = request.POST.get('imagen')
-        carro.nombre_producto = request.POST.get('nombre_producto')
-        carro.precio_producto = request.POST.get('precio_producto')
-        carro.save()
+        cod = request.POST.get('cod')
+        prod = Producto.objects.get(cod = int(cod))
+
+        if prod.stock > 0:
+            prod.stock -= 1
+            cantidad = 0
+            prod.save()
+
+            codProducto = request.POST.get
+            ('cod')
+            carroExiste = ItemsCarro.objects.filter(id_prod=codProducto)
+
+            if carroExiste:
+                carro = ItemsCarro.objects.get(id_prod=codProducto)
+                carro.cantidad = carro.cantidad + 1
+                carro.save()
+
+            else:
+                carro = ItemsCarro()
+                carro.id_prod = request.POST.get('cod_prod')
+                carro.nombre_producto = request.POST.get('nom_prod')
+                carro.precio_producto = request.POST.get('pre_prod')
+                carro.imagen = request.POST.get('img_prod')
+                carro.cantidad = 1
+                carro.total = 0
+                carro.save()
+
+        else:
+            messages.success(request, "Stock no disponible para este producto.")
 
     return render(request, 'app/index-log.html', datos)
 
@@ -141,7 +240,9 @@ def login(request):
 
 @login_required
 def products(request):
+
     productosAll = Producto.objects.all()
+
     response = requests.get('http://127.0.0.1:8000/api/productos/').json()
     
     #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
@@ -156,6 +257,7 @@ def products(request):
         carro.imagen = request.POST.get('imagen')
         carro.nombre_producto = request.POST.get('nombre_producto')
         carro.precio_producto = request.POST.get('precio_producto')
+        carro.cantidad = request.POST.get('cantidad')
         carro.save()
 
     return render(request, 'app/products.html', datos)
@@ -250,5 +352,18 @@ def eliminarUsuario(request, cod_usuario):
 def despacho(request):
     return render(request, 'app/despacho.html')
 
+def ordenUsuario(request):
 
+    orden = Orden.objects.all()
 
+    estados = EstadoOrden.objects.all()
+
+    datos = {
+        'orden' : orden,
+        'estados' : estados
+    }
+
+    return render(request, '')
+
+def seguimiento (request):
+    return render(request, 'app/seguimiento.html')

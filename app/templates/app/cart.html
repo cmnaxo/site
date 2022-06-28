@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{% static 'app/css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'app/css/me.css' %}">
+    <script src="{% static 'app/js/cart.js' %" ></script>
 
     <style>
         .ie-panel {
@@ -134,48 +135,93 @@
         </section>
 
         {% load humanize %}
-        <section class="section section-md bg-gray-dark mx-5 rounded mb-5">
-            <div class="container">
-                <div class="row justify-content-md-center justify-content-lg-between align-items-lg-center">
-                    <div class="col-md-9 col-lg-6 col-xl-5 wow fadeInLeftSmall">
-                        <div class="block-wrap-1 mb-5">
-                            <h2 class="mb-5">Producto(s)</h3>
-                        </div>
-                        <div class="d-inline-blockr">
-                            {% for aux in listaCarro %}
-                            <div class="col-12"> 
-                                <img src="{{ aux.imagen.url }}" class="py-5" width="142" height="30" alt="">
-                                <div class="mt-2">
-                                    <br>
-                                    <b>Producto:</b> {{ aux.nombre_producto }}
-                                    <br>
-                                    </p>
-                                    <div class="mt-5">
-                                        <a href="#" class="button-darker">{{ aux.precio_producto }}</a>
-                                    </div>
-                                </div>
+        <section style="background-color: rgb(255, 255, 255);">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col">
+                  <div class="card">
+                    <div class="card-body p-4">
+                      {% load humanize %}
+                      <div class="row">
+                        <div class="col-lg-7">
+                          <h5 class="mb-3"><a href="{% url 'products ' %}" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Continuar comprando</a>
+                          </h5>
+                          <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                              <p class="mb-1">Carrito de compras</p>
                             </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="col-md-9 col-lg-6 col-xl-5 mt-5 p-5 text-center">
-                        <div class="card" style="width: 18rem;">
+                          </div>
+                          {% for aux in listaCarro %}
+                          <!-- carta carro -->
+                          <div class="card mb-3">
                             <div class="card-body">
-                                {% for aux in listaCarro %}
-                                <h2 class="card-title">Resumen de la compra</h2>
-                                <p class="card-text my-5">El producto no viene con costo de envío incluido.
-                                    <br>
-                                <p class="mt-1">Precio original: </p><b>{{ aux.precio_producto }}</b>
-                                </p>
-
-                                <a href="{% url 'despacho' %}" class="btn btn-dark">Ir al despacho</a>
-                                {% endfor %}
+                              <div class="d-flex justify-content-between">
+                                <div class="d-flex flex-row align-items-center">
+                                  <div>
+                                    <img src="{{ aux.imagen.url }}" class="card-img img-fluid" style="width: 170px;">
+                                  </div> 
+                                  <div class="ms-3">
+                                    <h5>{{ aux.nombre_producto | capfirst}}</h5>
+                                  </div>
+                                  <div class="ms-3 mb-5">
+                                    <p>Ingrese cantidad</p>
+                                    <p>{{aux.cantidad}}</p>
+                                  </div>
+                                </div>
+                                <div class="d-flex flex-row align-items-center">
+                                  <div style="width: 80px;">
+                                    
+                                    <h5 class="mb-0">Precio: ${{ aux.total | intcomma }}</h5>
+                                  </div>
+                                  <button type="button" onclick="accumCart({{aux.id_prod}})" class="btn btn-warning me-1"><i class="fas fa-plus"></i></button>
+                                  <button type="button" onclick="deleteCart({{aux.id_prod}})" class="btn btn-warning"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                              </div>
                             </div>
+                          </div>
+                          {% endfor%}
+        
                         </div>
+                        <div class="col-lg-5">
+                          <div class="card text-white rounded-3" style="background-color: rgb(182, 182, 182);">
+                            <div class="card-body">
+                              <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="mb-0">Detalles de pago</h5>
+                              </div>
+          
+                             
+          
+                              </form>
+          
+                              <hr class="my-4">
+          
+                              <div class="d-flex justify-content-between">
+                                <p class="mb-2">Subtotal </p>
+                                <p class="mb-2">${{ accum | intcomma}}</p>
+                              </div>
+          
+                              <div class="d-flex justify-content-between mb-4">
+                                <p class="mb-2">Total</p>
+                                <p class="mb-2">${{total | intcomma}}</p>
+                              </div>
+          
+                              <button type="button" onclick="PagarCarrito()" class="btn btn-info btn-block btn-lg">                  
+                                <div class="d-flex justify-content-between">
+                                  <span>Pagar <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                </div>
+                              </button>
+          
+                            </div>
+                          </div>
+          
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </section>
+          </section>
 
         <!-- Footer -->
         <footer class="footer-classic bg-gray-8">

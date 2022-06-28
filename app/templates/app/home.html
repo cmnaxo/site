@@ -20,7 +20,6 @@
 
 
 {% block navb %}
-<!-- RD Navbar-->
 <div class="rd-navbar-wrap">
     <nav class="rd-navbar rd-navbar-creative" data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fixed"
         data-sm-device-layout="rd-navbar-fixed" data-md-layout="rd-navbar-fixed" data-md-device-layout="rd-navbar-fixed"
@@ -42,7 +41,8 @@
                 </div>
                 <!-- RD Navbar Nav-->
                 <div class="rd-navbar-nav-wrap">
-                    <div class="rd-navbar-main-item"><a class="button button-xs button-lighter" href="{% url 'login' %}">Iniciar
+                    <div class="rd-navbar-main-item"><a class="button button-xs button-lighter"
+                            href="{% url 'login' %}">Iniciar
                             sesión</a></div>
                     <!-- RD Navbar Nav-->
                     <ul class="rd-navbar-nav">
@@ -197,6 +197,7 @@
                         <p class="product__title"><a href="#">{{ aux.nombre | title }}</a></p>
                         <p class="product__price mt-1">Valor: {{ aux.precio | intcomma }}</p>
                         <p class="product__price">Stock: {{ aux.stock }}</p>
+                        
                     </div>
                     <div class="product__footer"><a class="button button-xs button-gray-2" href="#">detalles</a></div>
                 </article>

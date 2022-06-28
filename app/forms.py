@@ -48,3 +48,9 @@ class SesionForm(forms.ModelForm):
     class Meta:
         model = Sesion
         fields = ['correo', 'contraseña']
+
+class OrdenForm(forms.ModelForm):
+
+    class Meta:
+        model = Orden
+        fields = ['codigo', 'articulos', 'cantidad', 'total', 'estado_pedido', 'cliente']

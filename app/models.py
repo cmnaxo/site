@@ -1,7 +1,10 @@
 from distutils.command.upload import upload
-from tkinter import CASCADE
-from unicodedata import decimal
 from django.db import models
+
+# Para extensión modelo User de Django.
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -77,7 +80,8 @@ class ItemsCarro(models.Model):
     precio_producto = models.IntegerField()
     imagen = models.ImageField(upload_to="items_carro", null=True)
     cantidad = models.IntegerField()
-    total = models.IntegerField()
+    total = models.IntegerField(blank=True)
+    usuario = models.CharField(max_length=30)
 
     def __str__(self):
         return self.nombre_producto
@@ -108,4 +112,25 @@ class EstadoOrden(models.Model):
     class Meta:
         db_table = 'db_estado_orden'
 
+class TipoUsuarioExtra(models.Model):
+    tipo = models.CharField(max_length = 20)
 
+    def __str__(self):
+        return self.tipo
+
+    class Meta:
+        db_table = 'db_tipo_usuario'
+
+class UsuarioExtra(models.Model):
+    usuarioDjango = models.OneToOneField(User, on_delete = models.CASCADE)
+    run = models.CharField(max_length = 9)
+    dv_run = models.CharField(max_length = 1)
+    direccion = models.CharField(max_length = 80)
+    suscripcion = models.BooleanField()
+    tipo_usuario = models.ForeignKey(TipoUsuarioExtra, on_delete= models.CASCADE)
+
+    def __str__(self):
+        return str(self.usuarioDjango.username)
+
+    class Meta:
+        db_table = 'db_usuario_extra'

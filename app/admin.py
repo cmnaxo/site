@@ -56,4 +56,6 @@ admin.site.register(Registro, RegistroAdmin)
 admin.site.register(Sesion, SesionAdmin)
 admin.site.register(Orden, OrdenAdmin)
 admin.site.register(EstadoOrden)
+admin.site.register(UsuarioExtra)
+admin.site.register(TipoUsuarioExtra)
 

@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'fundcog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_api_app',
+        'NAME': 'fundacion_cog',
         'HOST': 'localhost',
         'PORT': '3306',
         'USER': 'root',

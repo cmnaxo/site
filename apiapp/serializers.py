@@ -16,3 +16,12 @@ class TipoProductoSerializer(serializers.ModelSerializer):
         model = TipoProducto
         fields = '__all__'
         
+class UsuarioExtraSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UsuarioExtra
+        fields = '__all__'
+
+class TipoUsuarioExtraSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoUsuarioExtra
+        fields = '__all__'

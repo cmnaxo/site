@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="wide wow-animation" lang="en">
 
 {% load static %}
 
-
 <head>
-    <!-- Site Title-->
-    <title>Carro de compras</title>
+
+    <title>Productos API</title>
 
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
 
-    <link rel="icon" href="{% static 'app/images/cart.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'app/images/products_icon.png' %}" type="image/x-icon">
 
     <!-- Stylesheets-->
     <link rel="stylesheet" type="text/css"
@@ -21,8 +20,6 @@
     <link rel="stylesheet" href="{% static 'app/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'app/css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'app/css/me.css' %}">
-    <script src="{% static 'app/js/cart.js' %" ></script>
 
     <style>
         .ie-panel {
@@ -103,12 +100,19 @@
                                 <ul class="rd-navbar-nav">
                                     <li><a href="{% url 'index-log' %}">Inicio</a>
                                     </li>
-                                    <li><a href="{% url 'about-us' %}">Quiénes somos</a>
+                                    {% if perms.app.add_producto %}
+                                    <li>
+                                        <a href="{% url 'agregar_producto' %}">Agregar producto(s)</a>
                                     </li>
-                                    <li><a href="{% url 'products' %}">Productos</a>
+                                    {% endif %}
+                                    {% if perms.app.view_producto %}
+                                    <li>
+                                        <a href="{% url 'listarProductos' %}">Listar producto(s)</a>
                                     </li>
-                                    <li class="active"><a href="{% url 'cart' %}"><i
-                                                class="icon-sm fa-solid fa-cart-shopping"></i></a>
+                                    {% endif %}
+                                    <li class="active"><a href="">Productos</a>
+                                    </li>
+                                    <li><a href="{% url 'cart' %}"><i class="icon-sm fa-solid fa-cart-shopping"></i></a>
                                     </li>
                                 </ul>
                             </div>
@@ -118,110 +122,59 @@
             </div>
         </header>
 
-        <!-- Breadcrumbs-->
-        <section class="breadcrumbs-custom2 bg-image"
-            style="background-image: url({% static 'app/images/cart_fondo.webp' %});">
+        <!-- Productos-->
+        <section class="section section-md bg-default text-center">
             <div class="container">
-                <h2 class="breadcrumbs-custom__title">Carro de compras</h2>
-                <ul class="breadcrumbs-custom__path">
-                    <li><a href="{% url 'index-log' %}">Inicio</a></li>
-                    <li class="active">Carro de compras</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="my-5">
-
-        </section>
-
-        {% load humanize %}
-        <section style="background-color: rgb(255, 255, 255);">
-            <div class="container py-5 h-100">
-              <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col">
-                  <div class="card">
-                    <div class="card-body p-4">
-                      {% load humanize %}
-                      <div class="row">
-                        <div class="col-lg-7">
-                          <h5 class="mb-3"><a href="{% url 'products ' %}" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Continuar comprando</a>
-                          </h5>
-                          <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                              <p class="mb-1">Carrito de compras</p>
-                            </div>
-                          </div>
-                          {% for aux in ItemsCarrito %}
-                          <!-- carta carro -->
-                          <div class="card mb-3">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between">
-                                <div class="d-flex flex-row align-items-center">
-                                  <div>
-                                    <img src="{{ aux.imagen.url }}" class="card-img img-fluid" style="width: 170px;">
-                                  </div> 
-                                  <div class="ms-3">
-                                    <h5>{{ aux.nombre_producto | capfirst}}</h5>
-                                  </div>
-                                  <div class="ms-3 mb-5">
-                                    <p>Ingrese cantidad</p>
-                                    <p>{{aux.cantidad}}</p>
-                                  </div>
-                                </div>
-                                <div class="d-flex flex-row align-items-center">
-                                  <div style="width: 80px;">
-                                    
-                                    <h5 class="mb-0">Precio: ${{ aux.total | intcomma }}</h5>
-                                  </div>
-                                  <button type="button" onclick="AumentarCarrito({{aux.id_prod}})" class="btn btn-warning me-1"><i class="fas fa-plus"></i></button>
-                                  <button type="button" onclick="EliminarDeCarrito({{aux.id_prod}})" class="btn btn-warning"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {% endfor%}
-        
+                <div class="isotope-wrap isotope-modern-wrap">
+                    <!-- Section Header-->
+                    <div class="section__header">
+                        <h2>Productos</h2>
+                        <div class="section__header-element"><a class="link-cta" href="#"></a>
                         </div>
-                        <div class="col-lg-5">
-                          <div class="card text-white rounded-3" style="background-color: rgb(182, 182, 182);">
-                            <div class="card-body">
-                              <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h5 class="mb-0">Detalles de pago</h5>
-                              </div>
-          
-                             
-          
-                              </form>
-          
-                              <hr class="my-4">
-          
-                              <div class="d-flex justify-content-between">
-                                <p class="mb-2">Subtotal </p>
-                                <p class="mb-2">${{ accum | intcomma}}</p>
-                              </div>
-          
-                              <div class="d-flex justify-content-between mb-4">
-                                <p class="mb-2">Total</p>
-                                <p class="mb-2">${{total | intcomma}}</p>
-                              </div>
-          
-                              <button type="button" onclick="PagarCarrito()" class="btn btn-info btn-block btn-lg">                  
-                                <div class="d-flex justify-content-between">
-                                  <span>Pagar <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
-                                </div>
-                              </button>
-          
-                            </div>
-                          </div>
-          
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                    <div class="isotope" data-isotope-layout="fitRows" data-isotope-group="products">
+                        <div class="row row-offset-2">
+
+                            {% for aux in apiEndpoint %}
+                            <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
+                                <!-- Product-->
+                                <article class="product"> <a class="product__image-wrap" href="#">
+                                        {% if aux.image %}
+                                        <img class="product__image" src="{{ aux.image }}" alt="" width="210"
+                                            height="200" /></a>
+                                        {% endif %}
+                                    <div class="product__main">
+                                        <p class="product__title"><a href="#">{{ aux.name }}</a></p>
+                                        <p class="product__price mt-2">{{ aux.status }}</p>
+                                        <p class="product__price mt-2">{{ aux.species }}</p>
+                                    </div>
+                                    <div class="product__footer">
+                                        <form action="" method="POST">
+
+                                            {% csrf_token %}
+
+                                            <input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
+                                            <input type="hidden" name="nombre_producto" id="nombre_producto"
+                                                value="{{ aux.nombre | title }}">
+                                            <input type="hidden" name="precio_producto" id="precio_producto"
+                                                value="{{ aux.precio }}">
+                                            <input type="hidden" name="codigo_producto" id="codigo_producto" value="{{ aux.cod }}">
+                                            <input type="submit" style="cursor: pointer;"
+                                                class="button button-xs button-gray-2" value="Agregar al carro">
+
+                                        </form>
+                                    </div>
+                                </article>
+                            </div>
+                            {% endfor %}
+
+                            
+
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </section>
+        </section>
 
         <!-- Footer -->
         <footer class="footer-classic bg-gray-8">
@@ -229,8 +182,9 @@
                 <div class="footer-classic__main">
                     <ul class="list-nav-bordered">
                         <li><a href="{% url 'index-log' %}">Inicio</a></li>
-                        <li><a href="{% url 'about-us' %}">Nosotros</a></li>
+                        <li><a href="{% url 'about-us' %}">Sobre nosotros</a></li>
                         <li><a href="{% url 'products' %}">Productos</a></li>
+                        </li>
                     </ul>
                 </div>
                 <div class="divider"></div>
@@ -258,9 +212,23 @@
     </div>
 
 
+    <!-- Global Mailform Output-->
+    <div class="snackbars" id="form-output-global"></div>
+    <!-- Javascript-->
     <script src="{% static 'app/js/core.min.js' %}"></script>
     <script src="{% static 'app/js/script.js' %}"></script>
     <script src="https://kit.fontawesome.com/b44ff12dcf.js" crossorigin="anonymous"></script>
+
+    {% for aux in listaProductos %}
+    <script type="text/javascript">
+        var precio = Number(document.getElementById('Valor: ').value);
+        var descuento = Number(document.getElementById('Valor final: ').value);
+
+        var resultado = (precio * descuento) + precio
+
+        document.getElementById('resultado').value = resultado
+    </script>
+    {% endfor %}
 
 </body>
 

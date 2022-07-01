@@ -13,5 +13,10 @@ class TipoProductoViewSet(viewsets.ModelViewSet):
     queryset = TipoProducto.objects.all()
     serializer_class = TipoProductoSerializer
 
-#GET: diccinario
-#get: metodo
+class UsuarioExtraViewSet(viewsets.ModelViewSet):
+    queryset = UsuarioExtra.objects.all()
+    serializer_class = UsuarioExtraSerializer
+
+class TipoUsuarioExtraViewSet(viewsets.ModelViewSet):
+    queryset = TipoUsuarioExtra.objects.all()
+    serializer_class = TipoUsuarioExtraSerializer

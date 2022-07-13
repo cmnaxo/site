@@ -1,10 +1,7 @@
-from distutils.command.upload import upload
 from django.db import models
 
 # Para extensión modelo User de Django.
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -75,7 +72,7 @@ class Sesion(models.Model):
     updated_at = models.DateField(auto_now=True)
 
 class ItemsCarro(models.Model):
-    id_prod = models.AutoField(primary_key=True)
+    id_prod = models.IntegerField(null=False)
     nombre_producto = models.CharField(max_length=60)
     precio_producto = models.IntegerField()
     imagen = models.ImageField(upload_to="items_carro", null=True)
@@ -122,12 +119,13 @@ class TipoUsuarioExtra(models.Model):
         db_table = 'db_tipo_usuario'
 
 class UsuarioExtra(models.Model):
-    usuarioDjango = models.OneToOneField(User, on_delete = models.CASCADE)
+    usuarioDjango = models.OneToOneField(User, on_delete = models.CASCADE,max_length=30)
     run = models.CharField(max_length = 9)
     dv_run = models.CharField(max_length = 1)
     direccion = models.CharField(max_length = 80)
     suscripcion = models.BooleanField()
-    tipo_usuario = models.ForeignKey(TipoUsuarioExtra, on_delete= models.CASCADE)
+    imagen = models.ImageField(upload_to="usuarios", null=True)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return str(self.usuarioDjango.username)

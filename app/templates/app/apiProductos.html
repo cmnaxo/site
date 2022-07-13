@@ -110,8 +110,9 @@
                                         <a href="{% url 'listarProductos' %}">Listar producto(s)</a>
                                     </li>
                                     {% endif %}
-                                    <li class="active"><a href="">Productos</a>
+                                    <li><a href="{% url 'products' %}">Productos</a>
                                     </li>
+                                    <li class="active"><a href="{% url 'apiProductos' %}">API</a></li>
                                     <li><a href="{% url 'cart' %}"><i class="icon-sm fa-solid fa-cart-shopping"></i></a>
                                     </li>
                                 </ul>
@@ -217,18 +218,8 @@
     <!-- Javascript-->
     <script src="{% static 'app/js/core.min.js' %}"></script>
     <script src="{% static 'app/js/script.js' %}"></script>
-    <script src="https://kit.fontawesome.com/b44ff12dcf.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/201353bdaf.js" crossorigin="anonymous"></script>
 
-    {% for aux in listaProductos %}
-    <script type="text/javascript">
-        var precio = Number(document.getElementById('Valor: ').value);
-        var descuento = Number(document.getElementById('Valor final: ').value);
-
-        var resultado = (precio * descuento) + precio
-
-        document.getElementById('resultado').value = resultado
-    </script>
-    {% endfor %}
 
 </body>
 

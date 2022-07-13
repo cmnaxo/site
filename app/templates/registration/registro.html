@@ -22,6 +22,14 @@
             background-position: center center;
             background-repeat: no-repeat;
         }
+
+        label {
+            margin-top: 5px;
+        }
+
+        span {
+            color: gray;
+        }
     </style>
 
 </head>
@@ -39,25 +47,187 @@
                 </div>
 
                 <h2 class="fw-bold text-center py-5">¿Nuevo usuario?</h2>
+
                 <hr>
 
-                <!-- Login -->
-                <form action="#" method="POST" enctype="multipart/form-data">
+                <!-- New account form -->
+                <form id="form" action="" method="POST" onchange="Validations()">
 
-                    {% csrf_token %}
 
                     <div class="table-responsive">
                         <table class="my-3">
-                            {{ form | crispy }}
+
+                            {% csrf_token %}
+
+                            <label for="txtUser" class="form-label">Nombre de usuario</label>
+                            <span id="spanUser"></span>
+                            <input type="text" class="form-control" id="txtUser" placeholder="Ejemplo: Pedro"
+                                name="txtUser" autofocus="" required="">
+
+                            <label for="txtEmail" class="form-label">Correo electrónico</label>
+                            <span id="spanEmail"></span>
+                            <input type="e-mail" class="form-control" id="txtEmail"
+                                placeholder="Ejemplo: pe.orellana@gmail.com" name="txtEmail" autofocus="" required="">
+
+                            <label for="txtPassword" class="form-label">Contraseña</label>
+                            <span id="spanPassword"></span>
+                            <input type="password" class="form-control" id="txtPassword"
+                                placeholder="Ingresa una contraseña" name="txtPassword" autofocus="" required="">
+
+                            <label for="txtPassword2" class="form-label">Confirmación contraseña</label>
+                            <input type="password" class="form-control" id="txtPassword2"
+                                placeholder="Repite la contraseña" name="txtPassword2" autofocus="" required="">
+
+                            <label for="txtNombre" class="form-label">Nombre</label>
+                            <span id="spanNombre"></span>
+                            <input type="text" class="form-control" id="txtNombre" placeholder="Ingresa tu nombre"
+                                name="txtNombre" autofocus="" required="">
+
+                            <label for="txtApellidos" class="form-label">Apellidos</label>
+                            <span id="spanApellido"></span>
+                            <input type="text" class="form-control" id="txtApellidos" placeholder="Ingresa tu apellido"
+                                name="txtApellidos" autofocus="" required="">
+
+                            <label for="txtRut" class="form-label">RUT</label>
+                            <span id="spanRut"></span>
+                            <input type="text" class="form-control" id="txtRut" placeholder="Ejemplo: 10500200"
+                                name="txtRut" autofocus="" required="">
+
+                            <label for="txtDv" class="form-label">Dígito verificador</label>
+                            <span id="spanDv"></span>
+                            <input type="text" class="form-control" id="txtDv" placeholder="Ejemplo: 1" name="txtDv"
+                                autofocus="" required="">
+
+                            <label for="txtDireccion" class="form-label">Dirección</label>
+                            <span id="spanDireccion"></span>
+                            <input type="text" class="form-control" id="txtDireccion" placeholder="Ingresa tu dirección"
+                                name="txtDireccion" autofocus="" required="">
+
+                            <label for="txtImagen" class="form-label">Foto de perfil</label>
+                            <span id="spanImagen"></span>
+                            <input type="file" class="form-control" id="txtImagen"
+                                placeholder="Selecciona una foto de perfil" name="txtImagen" autofocus="" required="">
+
                             <hr>
+
                         </table>
                     </div>
 
                     <!-- Para que el botón se expanda al ancho de la pagina -->
                     <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary btn-block">Crear cuenta</a></button>
+                        <input type="submit" class="btn btn-primary" value="Crear cuenta">
                     </div>
+
                 </form>
+
+                <script type="text/javascript">
+
+                    function Validations() {
+
+                        // Nombre de usuario.
+                        var username = document.getElementById("txtUser").value
+                        var spanUsername = document.getElementById("spanUser");
+                        if (username.length > 4) {
+                            username = true
+                            spanUsername.innerHTML = `<span class="helptext" id="spanUser"></span>`;
+                        } else {
+                            username = false
+                            spanUsername.innerHTML = `<span class="helptext" id="spanUser"> | El usuario debe contener mínimo 5 carácteres</span>`;
+                        }
+
+                        // Nombre.
+                        var nombre = document.getElementById("txtNombre").value
+                        var spanNombre = document.getElementById("spanNombre");
+                        if (nombre.length > 2) {
+                            nombre = true
+                            spanNombre.innerHTML = `<span class="helptext" id="spanNombre"></span>`;
+                        } else {
+                            nombre = false
+                            spanNombre.innerHTML = `<span class="helptext" id="spanNombre"> | Largo mínimo 3 carácteres</span>`;
+                        }
+
+                        // Apellidos.
+                        var apellido = document.getElementById("txtApellidos").value
+                        var spanApellido = document.getElementById("spanApellido");
+                        if (apellido.length > 2) {
+                            apellido = true
+                            spanApellido.innerHTML = `<span id="spanApellido"></span>`;
+                        } else {
+                            apellido = false
+                            spanApellido.innerHTML = `<span class="helptext" id="spanApellido"> | Largo mínimo 3 carácteres</span>`;
+                        }
+
+                        // E-mail.
+                        var email = document.getElementById("txtEmail").value
+                        var spanEmail = document.getElementById("spanEmail");
+                        if (email.length > 4) {
+                            email = true
+                            spanEmail.innerHTML = `<span id="spanEmail"></span>`;
+                        } else {
+                            email = false
+                            spanEmail.innerHTML = `<span class="helptext" id="spanEmail"> | El e-mail debe contener mínimo 5 carácteres o un @.</span>`;
+                        }
+
+                        // Contraseña.
+                        var password1 = document.getElementById("txtPassword").value
+                        var password2 = document.getElementById("txtPassword2").value
+                        var spanPassword = document.getElementById("spanPassword");
+                        if (password1.length > 5 && password1 === password2) {
+                            password1 = true
+                            spanPassword.innerHTML = `<span class="helptext" id="spanPassword"></span>`;
+                        } else {
+                            password1 = false
+                            spanPassword.innerHTML = `<span class="helptext" id="spanPassword"><ul><li>Su contraseña no puede ser muy similar a su otra información personal.</li>
+                            <li>Su contraseña es muy corta. Debe contener al menos 5 caracteres.</li><li>Su contraseña no puede ser una contraseña de uso común.</li></ul></span>`;
+                        }
+
+                        // RUT.
+                        var rut = document.getElementById("txtRut").value
+                        var spanRut = document.getElementById("spanRut");
+                        if (rut.length >= 7 && rut.length <= 8) {
+                            rut = true
+                            spanRut.innerHTML = `<span class="helptext" id="spanRut"></span>`;
+                        } else {
+                            rut = false
+                            spanRut.innerHTML = `<span class="helptext" id="spanRut"> | Ingresa tu rut sin puntos ni dígito verificador</span>`;
+                        }
+
+                        // RUT.
+                        var dv = document.getElementById("txtDv").value
+                        var spanDv = document.getElementById("spanDv");
+                        if (dv.length == 1) {
+
+                            if (dv.toLowerCase() == 'k') {
+                                dv = true
+                                spanDv.innerHTML = `<span class="helptext" id="spanDv"></span>`;
+
+                            } else if (dv = !0 && dv > 0) {
+                                dv = true
+                                spanDv.innerHTML = `<span class="helptext" id="spanDv"></span>`;
+
+                            } else {
+                                rut = false
+                                spanDv.innerHTML = `<span class="helptext" id="spanDv"> | Ingrese un dígito verificador válido</span>`;
+                            }
+
+                        } else {
+                            rut = false
+                            spanDv.innerHTML = `<span class="helptext" id="spanDv"> | Ingrese un dígito verificador válido</span>`;
+                        }
+
+                        // Direccion.
+                        var direccion = document.getElementById("txtDireccion").value
+                        var spanDireccion = document.getElementById("spanDireccion");
+                        if (direccion.length > 5) {
+                            direccion = true
+                            spanDireccion.innerHTML = `<span class="helptext" id="spanDireccion"></span>`;
+                        } else {
+                            direccion = false
+                            spanDireccion.innerHTML = `<span class="helptext" id="spanDireccion"> | La dirección debe contener más de 5 carácteres.</span>`;
+                        }
+
+                    }
+                </script>
 
                 <!-- Login con redes sociales -->
                 <div class="container w-100 my-5">
@@ -105,6 +275,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/201353bdaf.js" crossorigin="anonymous"></script>
 
 </body>
 

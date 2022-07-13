@@ -3,6 +3,30 @@
 
 {% load static %}
 
+<script>
+  function confirmarSuscripcion() {
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Estás seguro?',
+      text: 'Al aceptar la suscripción, se te enviará un correo electrónico con los datos del pago.',
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "¡Si, suscribirme!",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          '¡Suscripción realizada!',
+          'Te has suscrito',
+          'success'
+        ).then(function () {
+          window.location.href = "/suscribe/";
+        })
+      }
+    })
+  }
+</script>
+
 <head>
   <title>Suscripción</title>
 
@@ -21,6 +45,8 @@
   <link rel="stylesheet" href="{% static 'app/css/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'app/css/fonts.css' %}">
   <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+
+  <script src="{% static 'app/js/cart.js' %}"></script>
 
   <style>
     .ie-panel {
@@ -83,7 +109,8 @@
                 <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
                 <!-- RD Navbar Brand-->
                 <div class="rd-navbar-brand"><a class="brand" href="{% url 'index-log' %}">
-                    <div class="brand__name"><img src="{% static 'app/images/logo.jpg' %}" alt="" width="190" height="50" />
+                    <div class="brand__name"><img src="{% static 'app/images/logo.jpg' %}" alt="" width="190"
+                        height="50" />
                     </div>
                   </a></div>
               </div>
@@ -95,8 +122,10 @@
                 <ul class="rd-navbar-nav">
                   <li class="active"><a href="{% url 'index-log' %}">Inicio</a>
                   </li>
+                  {% if user.is_not_autenthicated %}
                   <li><a href="{% url 'about-us' %}">Quiénes somos</a>
                   </li>
+                  {% endif %}
                   <li><a href="{% url 'products' %}">Productos</a>
                   </li>
                   <li><a href="{% url 'cart' %}"><i class="icon-sm fa-solid fa-cart-shopping"></i></a>
@@ -135,8 +164,9 @@
                   <h1 data-caption-animate="fadeInUpSmall">¿Deseas donar?</h1>
                   <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall"
                     data-caption-delay="300">Nuestro sistema de donación posee la mayor cantidad de opciones posibles;
-                    desde efectivo hasta tarjetas y/o giftcards.</p><a class="button button-primary" href="{% url 'donation' %}"
-                    data-caption-animate="fadeInRightSmall" data-caption-delay="550">donar ahora</a>
+                    desde efectivo hasta tarjetas y/o giftcards.</p><a class="button button-primary"
+                    href="{% url 'donation' %}" data-caption-animate="fadeInRightSmall" data-caption-delay="550">donar
+                    ahora</a>
                 </div>
               </div>
             </div>
@@ -148,7 +178,7 @@
                   <h1 data-caption-animate="fadeInUpSmall">Beneficios</h1>
                   <p class="big" style="max-width: 520px" data-caption-animate="fadeInRightSmall"
                     data-caption-delay="300">En caso de haber accedido a la suscripción de nuestra fundación, esta la
-                    otorgará un 5% de descuento en todos los productos disponibles.</p>       
+                    otorgará un 5% de descuento en todos los productos disponibles.</p>
                 </div>
               </div>
             </div>
@@ -174,7 +204,7 @@
         <div class="row row-30">
 
           {% for aux in listaUsuarios %}
-          {% if aux.tipo_usuario == 1 %}
+          {% if aux.suscripcion == 1 %}
           <div class="col-md-6 col-lg-4">
             <!-- Profile creative-->
             <article class="profile-creative">
@@ -183,9 +213,9 @@
               </div>
               {% endif %}
               <div class="profile-creative__main" data-fixed-height="">
-                <p class="profile-creative__title">{{ aux.primer_nombre }} {{ aux.primer_apellido }}</p>
-                <p class="profile-creative__subtitle">Suscrito desde el {{ aux.created_at }}</p>
-              </div>  
+                <p class="profile-creative__title">{{ aux.usuarioDjango }}</p>
+                <p class="profile-creative__subtitle">{{ aux.created_at }}</p>
+              </div>
             </article>
           </div>
           {% endif %}
@@ -200,20 +230,35 @@
         <div class="row row-70 justify-content-md-center justify-content-xl-between">
           <div class="col-md-10 col-lg-6 col-xl-5">
             <h4>¿Cómo suscribirme?</h4>
-            <p>Actualmente el método de suscripción consiste en ingresar tu correo electrónico en un corto y sencillo formulario.
-              La suscripción también otorga ciertos beneficios, entre ellos, un <b>5% de descuento en todos nuestros productos disponibles</b> de nuestro sitio web.
+            <p>Actualmente el método de suscripción consiste en ingresar tu correo electrónico en un corto y sencillo
+              formulario.
+              La suscripción también otorga ciertos beneficios, entre ellos, un <b>5% de descuento en todos nuestros
+                productos disponibles</b> de nuestro sitio web.
             </p>
 
+            <hr>
+
+            {% if UsuarioExtra.suscripcion == False %}
             <h4>Suscripción</h4>
             <p class="mb-3"><b>A continuación, ingresa tu correo electrónico: </b></p>
             <label for="email" class="form-label"></label>
-            <input type="email" class="form-control" name="email" placeholder="k.hills@gmail.com">
-            <input type="submit" class="button button-xs button-lighter mt-3" value="Suscribirse">
+            <input type="email" class="form-control" name="email" placeholder="{{ user.email }}">
+            <button type="button" class="btn btn-dark mt-3" onclick="confirmarSuscripcion()">
+              <div class="d-flex justify-content-between">
+                <a href="#!" class="text-white">Suscribirme<i class="fas fa-long-arrow-alt-right ms-2"></i></a>
+              </div>
+            </button>
+            {% else %}
+            <h4>Actualmente ya te encuentras suscrito</h4>
+            <p class="mb-3"><b>Disfruta de todos nuestros beneficios. Gracias por ayudar a nuestra fundación.</b></p>
+            {% endif %}
+
+
           </div>
           <div class="col-md-10 col-lg-6">
             <div class="row grid-2">
-              <div class="col-6"><img src="{% static 'app/images/suscribe_1.jpg' %}" alt="" width="273" height="214" /><img
-                  src="{% static 'app/images/suscribe_2.jpg' %}" alt="" width="273" height="214" />
+              <div class="col-6"><img src="{% static 'app/images/suscribe_1.jpg' %}" alt="" width="273"
+                  height="214" /><img src="{% static 'app/images/suscribe_2.jpg' %}" alt="" width="273" height="214" />
               </div>
               <div class="col-6"><img src="{% static 'app/images/woman2.jpg' %}" alt="" width="273" height="451" />
               </div>
@@ -229,8 +274,10 @@
         <div class="footer-classic__main">
           <ul class="list-nav-bordered">
             <li><a href="{% url 'index-log' %}">Inicio</a></li>
+            {% if user.is_not_autenthicated %}
             <li><a href="{% url 'about-us' %}">Sobre nosotros</a>
             </li>
+            {% endif %}
             <li><a href="{% url 'products' %}">Productos</a></li>
             </li>
           </ul>
@@ -265,13 +312,13 @@
   <script src="{% static 'app/js/core.min.js' %}"></script>
   <script src="{% static 'app/js/script.js' %}"></script>
 
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
-
   <script src="https://kit.fontawesome.com/b44ff12dcf.js" crossorigin="anonymous"></script>
 
 </body>

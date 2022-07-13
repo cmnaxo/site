@@ -1,11 +1,11 @@
 from dataclasses import fields
-from multiprocessing.sharedctypes import Value
 from django import forms
 
 from django.forms import ModelForm, ValidationError
 from .models import *
 
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.forms import ValidationError
 
 # Creamos templates de los formularios
@@ -14,15 +14,6 @@ from django.forms import ValidationError
 class ProductoForm(forms.ModelForm):
 
     nombre = forms.CharField(min_length=5)
-
-    def clean_nombre(self):
-        nombre = self.cleaned_data["nombre"]
-        exists = Producto.objects.filter(nombre__iexact=nombre).exists()
-
-        if exists:
-            raise ValidationError("Este nombre ya está registrado anteriormente, prueba uno nuevo.")
-
-        return nombre
 
     class Meta:
         model = Producto
@@ -35,7 +26,17 @@ class RegistroForm(forms.ModelForm):
         fields = ['correo', 'contraseña']
 
 class RegistroUserForm(UserCreationForm):
-    pass
+    
+    username = forms.CharField(min_length=5, max_length=20)
+    first_name = forms.CharField(min_length=5, max_length=20)
+    last_name = forms.CharField(min_length=5, max_length=20)
+    email = forms.EmailField()
+    password1 = forms.CharField(min_length=5, max_length=15)
+    password2 = forms.CharField(min_length=5, max_length=15)
+
+    class meta:
+        model = User
+        fields = ['username','first_name','last_name','correo','password1','password2']
 
 class UsuarioForm(forms.ModelForm):
 
@@ -49,8 +50,15 @@ class SesionForm(forms.ModelForm):
         model = Sesion
         fields = ['correo', 'contraseña']
 
-class OrdenForm(forms.ModelForm):
+class OrdenForm(forms.ModelForm): 
 
     class Meta:
         model = Orden
         fields = ['codigo', 'articulos', 'cantidad', 'total', 'estado_pedido', 'cliente']
+
+class CambiarImg(ModelForm):
+
+    class Meta:
+        
+        model = UsuarioExtra
+        fields = ['imagen']

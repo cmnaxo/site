@@ -1,4 +1,11 @@
-function msj(){
+const hamburger = document.getElementById('hamburger');
+    hamburger.addEventListener('click', function (e) {
+        const ul = document.querySelector('nav > ul');
+        ul.classList.toggle('menu-slide');
+        hamburger.classList.toggle('cross');
+});
+
+function anularSuscripcion(){
   const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -8,8 +15,8 @@ function msj(){
     })
     
     swalWithBootstrapButtons.fire({
-      title: 'Estas seguro de continuar?',
-      text: "Podrás volver a suscribirte!",
+      title: '¿Estás seguro de continuar?',
+      text: "Podrás volver a suscribirte en un futuro.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí',
@@ -17,14 +24,36 @@ function msj(){
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/CancelarSuscripcion/";
+        window.location.href = "/anularSuscripcion/";
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
         swalWithBootstrapButtons.fire(
-          'Tu suscripción se mantendrá :)',
+          'Tu suscripción se mantendrá activa, ¡muchas gracias!',
         )
+      }
+    })
+}
+
+function confirmarSuscripcion(){
+  Swal.fire({
+      icon: 'warning',
+      title: '¿Estás seguro?',
+      text: 'Al aceptar la suscripción, se te enviará un correo electrónico con los datos del pago.',
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "¡Si, suscribirme!",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          '¡Suscripción realizada!',
+          'Te has suscrito',
+          'success'
+        ).then(function() {
+          window.location.href = "/suscribe/";
+        })
       }
     })
 }
@@ -34,9 +63,9 @@ function carro(){
       icon: 'success',
       title: 'Producto añadido',
     })
-  }
+}
   
-  function EliminarDeCarrito(id_prod){
+function eliminarCarro(id){
     Swal.fire({
       title: '¿Está seguro?',
       text: "El producto será eliminado del carro",
@@ -53,17 +82,17 @@ function carro(){
             text: "Producto eliminado correctamente",
             icon: 'success'
         }).then (function(){
-          window.location.href = "/EliminarDeCarrito/" + id_prod + "/";
+          window.location.href = "/eliminarCarro/" + id + "/";
         })
       }
     })
-  }
+}
   
-  function AumentarCarrito(id_prod) {
-    window.location.href = "/AumentarCarrito/" + id_prod + "/";
-  }
+function aumentarCarro(id_prod) {
+    window.location.href = "/aumentarCarrito/" + id_prod + "/";
+}
   
-  function PagarCarrito(){
+function PagarCarrito(){
     Swal.fire({
       title: 'Pago realizado',
       text: "Su pago ha sido efectuado correctamente",
@@ -74,7 +103,31 @@ function carro(){
     }).then(function(){
           window.location.href = "/ResetCarrito/";
         });
-  }
+}
+
+function alterarEstado(code) {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "El estado del pedido será modificado",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Actualizar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Eliminado",
+                    text: "Pedido actualizado correctamente",
+                    icon: 'success'
+                }).then(function () {
+                    window.location.href = "/alterarEstado/" + code + "/";
+                })
+            }
+        })
+}
+
   
   
   

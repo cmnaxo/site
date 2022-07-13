@@ -1,15 +1,14 @@
-import re
-from pkg_resources import require
+from asyncio.windows_events import NULL
 import requests
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
 from .forms import *
 from .models import *
-from app.models import Producto
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login as login_aut
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group
 
 #El view se comporta como un controlador.
 #Conecta con el modelo.
@@ -82,99 +81,97 @@ def eliminarProducto(request, cod):
 def aboutUs(request):
     return render(request, 'app/about-us.html')
 
-#CarritoCompra : LISTO
 @login_required
 def cart(request):
     
-    usuarioCarrito = request.user.username
-    carritoAll = ItemsCarro.objects.filter(usuario = usuarioCarrito)
-    contadorGlobal = 0
+    usuario = request.user
+    usuarioExtra = UsuarioExtra.objects.get(usuarioDjango = usuario)
 
-    for Producto in carritoAll:
-        Producto.total = Producto.precio_producto * Producto.cantidad
-        Producto.save()
-        contadorGlobal = contadorGlobal + Producto.total
+    usuarioCarro = request.user.username
+    carro = ItemsCarro.objects.filter(usuario = usuarioCarro)
+
+    accum = 0
+
+    for item in carro:
+        item.total = item.cantidad * item.precio_producto
+        item.save()
+        accum += item.total
+        
 
     usuario = request.user
     usuarioExtra = UsuarioExtra.objects.get(usuarioDjango = usuario)
 
     if usuarioExtra.suscripcion == True:
-        total = round(contadorGlobal -  (contadorGlobal * 0.05) )
+        total = round(accum - (accum * 0.05))
 
     else:
-        total = round(contadorGlobal)
+        total = accum
+
+    descuento = round(accum * 0.05)
+    usuarioExtra = UsuarioExtra.objects.all()
 
     datos = {
-        'ItemsCarrito' : carritoAll,
-        'contadorGlobal' : contadorGlobal,
-        'total' : total
+        'itemsCarro' : carro,
+        'total' : total,
+        'accum' : accum,
+        'descuento' : descuento,
+        'usuarioExtra' : usuarioExtra,
     }
 
     return render(request, 'app/cart.html', datos)
 
-#Acumulador del carro / cantidad
-#AumentarCarrito: LISTO
-@permission_required('app.add_producto')
-def AumentarCarrito(request, id_prod):
-    carro = ItemsCarro.objects.get(id_prod=id_prod)
+def eliminarCarro(request, id):
+   
+    carro = ItemsCarro.objects.get(id = id)
+    codProd = carro.id_prod
+
+    producto = Producto.objects.get(cod = int(codProd))
+    producto.stock += carro.cantidad
+    producto.save()
+    carro.delete()
+
+    return redirect(to="cart")
+
+def aumentarCarro(request, id):
+    carro = ItemsCarro.objects.get(id = id)
     carro.cantidad += 1
     carro.save()
 
-    producto = Producto.objects.get(cod = int(id_prod))
+    codProd = carro.id_prod
+    producto = Producto.objects.get(cod = int(codProd))
     producto.stock -= 1
     producto.save()
 
-    return redirect(to='cart')
+    return redirect(to="cart")
 
-#CRUD Carro > Delete
-#EliminarDeCarrito: LISTO
-@permission_required('app.delete_producto')
-def EliminarDeCarrito(request, id_prod):
-    carro = ItemsCarro.objects.get(id_prod=id_prod)
-    carro.cantidad = carro.cantidad - 1
+def resetearCarro(request):
 
-    if carro.cantidad > 0:
-        carro.save()
+    usuarioCarro = request.user.username
+    carro = ItemsCarro.objects.filter(usuario = usuarioCarro)
 
-    else:
-        carro.delete()
+    lista = " "
+    for item in carro:
+        lista = "" + lista + item.nombre_producto + " (" + str(item.cantidad) + " )"
 
-    producto = Producto.objects.get(codigo=int(id_prod))
-    producto.stock += 1
-    producto.save()
+    cantidad_productos = len(carro)
 
-    return redirect(to='cart')
-
-#ResetCarrito: LISTO
-@permission_required('app.delete_producto')
-def ResetCarrito(request):
-    
-    usuarioCarrito = request.user.username
-    carritoAll = ItemsCarro.objects.filter(usuario = usuarioCarrito)
-
-    lista_productos = " "
-    for producto in carritoAll:
-        lista_productos = "" + lista_productos + producto.nombre_producto + " (" + str(producto.cantidad) + ") "
-
-    cantidad_productos = len(carritoAll)
-
-    precio_total = 0
-    for producto in carritoAll:
-        precio_total = precio_total + producto.total
+    total = 0
+    for item in carro:
+        total += item.total
 
     cliente = request.user.username
 
-    orden = Orden()
-    orden.articulos = lista_productos
-    orden.cantidad = cantidad_productos
-    orden.total = precio_total
-    orden.estado_pedido = "Orden recibida"
-    orden.cliente = cliente
-    orden.save()
+    order = Orden()
+    order.articulos = lista
+    order.cantidad = cantidad_productos
+    order.total = total
+    order.estado_pedido = "Validación"
+    order.cliente = cliente
+    order.save()
 
-    carritoAll.delete()
+    carro.delete()
 
-    return redirect(to='cart')
+    return redirect(to="cart")
 
 @login_required
 def donation(request):
@@ -185,9 +182,10 @@ def success(request):
     carro = ItemsCarro.objects.all()
     carro.delete()
 
+    messages.success(request, "¡Compra realizada correctamente!")
+
     return render(request, 'app/success.html')
 
-#Pendiente
 @login_required
 def historial(request):
     
@@ -216,15 +214,17 @@ def indexLog(request):
 
         if producto.stock > 0:
             producto.stock -= 1
-            carritoCantidad = 0
             producto.save()
 
+            usuarioCarro = request.user.username
+
             codigoProducto = request.POST.get('codigo_producto')
-            carritoExistente = ItemsCarro.objects.filter(id_prod=codigoProducto)
+            carritoExistente = ItemsCarro.objects.filter(usuario = usuarioCarro, id_prod = codigoProducto)
 
             if carritoExistente:
-                carro = ItemsCarro.objects.get(id_prod=codigoProducto)
-                carro.cantidad = carro.cantidad + 1
+                carro = ItemsCarro.objects.get(usuario = usuarioCarro, id_prod = codigoProducto)
+                carro.cantidad += 1
+                carro.total = carro.cantidad * carro.precio_producto
                 carro.save()
 
             else:
@@ -238,7 +238,7 @@ def indexLog(request):
                 carro.usuario = request.user.username
                 carro.save()
 
-                return redirect(to='index-log')
+                return redirect(to="index-log")
 
         else:
             messages.success(request, "No hay stock disponible para este producto.")
@@ -254,87 +254,198 @@ def apiProductos(request):
 
     return render(request, 'app/apiProductos.html', datos)
 
-def login(request):
-    datos = {
-        'form': SesionForm()
-    }
-
-    return render(request, 'app/login.html', datos)
-
-#LISTO
 @login_required
-def products(request, cod):
+def products(request):
 
-    producto = Producto.objects.get(cod=cod)
-    
+    apiProductos = requests.get('http://127.0.0.1:8000/api/productos/').json()
+    productosAll = Producto.objects.all()
+
     #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
     datos = {
-        'producto' : producto
+        'listaProductos' : productosAll,
+        'listaApiProductos' : apiProductos
     }
-    
+
     if request.method == 'POST':
-        carro = ItemsCarro()
-        #Rellenamos el carro con los datos que vienen de POST
-        carro.imagen = request.POST.get('imagen')
-        carro.nombre_producto = request.POST.get('nombre_producto')
-        carro.precio_producto = request.POST.get('precio_producto')
-        carro.cantidad = request.POST.get('cantidad_producto')
-        carro.save()
+        cod = request.POST.get('codigo_producto')
+        producto = Producto.objects.get(cod=int(cod))
+
+        if producto.stock > 0:
+            producto.stock -= 1
+            producto.save()
+
+            usuarioCarro = request.user.username
+
+            codigoProducto = request.POST.get('codigo_producto')
+            carritoExistente = ItemsCarro.objects.filter(usuario = usuarioCarro, id_prod = codigoProducto)
+
+            if carritoExistente:
+                carro = ItemsCarro.objects.get(usuario = usuarioCarro, id_prod = codigoProducto)
+                carro.cantidad += 1
+                carro.total = carro.cantidad * carro.precio_producto
+                carro.save()
+
+            else:
+                carro = ItemsCarro()
+                carro.imagen = request.POST.get('imagen')     
+                carro.nombre_producto = request.POST.get('nombre_producto')
+                carro.precio_producto = request.POST.get('precio_producto')
+                carro.id_prod = request.POST.get('codigo_producto')
+                carro.cantidad = 1
+                carro.total = 0
+                carro.usuario = request.user.username
+                carro.save()
+
+                return redirect(to="products")
+
+        else:
+            messages.success(request, "No hay stock disponible para este producto.")
+
+
+    else:
+            messages.success(request, "El producto selecciona no tiene stock disponible, vuelva a entrar más tarde.")
 
     return render(request, 'app/products.html', datos)
 
-def register(request):
-    datos = {
-        'form': RegistroForm()
-    }
-
-    return render(request, 'app/register.html', datos)
-
 def registro(request):
-    datos = {
-        'form' : RegistroUserForm()
-    }
 
     if request.method == 'POST':
-        formulario = RegistroUserForm(request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            return redirect(to="login")
-        datos["form"] = formulario
+        txtUser = request.POST.get('txtUser')
+        txtEmail = request.POST.get('txtEmail')
+        txtPassword = request.POST.get('txtPassword')
+        txtNombre = request.POST.get('txtNombre')
+        txtApellidos = request.POST.get('txtApellidos')
+        txtRut = request.POST.get('txtRut')
+        txtDv = request.POST.get('txtDv')
+        txtDireccion = request.POST.get('txtDireccion')
+        txtImagen = request.POST.get('txtImagen')
 
-    return render(request, 'registration/registro.html', datos)
+        try:
+            usuario = User()
+            usuario.username = txtUser
+            usuario.first_name = txtNombre
+            usuario.last_name = txtApellidos
+            usuario.email = txtEmail
+            usuario.password = txtPassword
+            usuario.set_password(txtPassword)
+            usuario.save()
+
+            existsUser = User.objects.get(username=txtUser)
+
+            usuarioExtra = UsuarioExtra()
+            usuarioExtra.usuarioDjango = existsUser
+            usuarioExtra.run = txtRut
+            usuarioExtra.dv_run = txtDv
+            usuarioExtra.direccion = txtDireccion
+            usuarioExtra.suscripcion = False
+            usuarioExtra.imagen = NULL
+            usuarioExtra.save()
+
+            group = Group.objects.get(name='Cliente')
+            usuario.groups.add(group)
+
+            access = authenticate(username=txtUser, password=txtPassword)
+            if access is not None:
+                login_aut(request, access)
+                return redirect(to='index-log')
+
+        except Exception as e:
+            print("Error: " + str(e))
+            messages.success(request, "El usuario ya existe.")
+
+    return render(request, 'registration/registro.html')
 
 @login_required
 def suscribe(request):
-    usuarioAll = Usuario.objects.all()
+    usuario = request.user
+    usuarioExtra = UsuarioExtra.objects.get(usuarioDjango = usuario)
+
+    usuarioExtra.suscripcion = True
+    usuarioExtra.save()
+
+    messages.success(request, "La suscripción se realizó exitosamente.")
+
+    return redirect(to='perfil')
+
+@login_required
+def suscribete(request):
+
+    user = request.user
+    usuarioAll = UsuarioExtra.objects.all()
     
     #JSON > Recoge la variable productosAll, que a su vez contiene todas las variables del modelo (DB)
     datos = {
-        'listaUsuarios' : usuarioAll
+        'listaUsuarios' : usuarioAll,
+        'user' : user
     }
 
-    if request.POST:
-        usuario = request.user
-        usuarioExtra = usuarioExtra.objects.get(usuarioDjango = usuario)
-        usuarioExtra.suscripcion = True
-        usuarioExtra.save()
-        messages.success(request, "La suscripción se realizó exitosamente.")
+    return render(request, 'app/suscribete.html', datos)
 
-    return render(request, 'app/suscribe.html', datos)
-
-def cancelarSuscripcion(request):
+@login_required
+def anularSuscripcion(request):
     usuario = request.user
     usuarioExtra = UsuarioExtra.objects.get(usuarioDjango = usuario)
     usuarioExtra.suscripcion = False
     usuarioExtra.save()
     messages.success(request, "Lamentamos que debas irte, esperamos tu apoyo nuevamente.")
 
+    return redirect(to='perfil')
+
+@login_required
+def perfil(request):
+
+    usuario = request.user
+    usuarioExtra = UsuarioExtra.objects.get(usuarioDjango = usuario)
+
+    historial = Orden.objects.filter(cliente = request.user.username)
+
+    usuarioRun = UsuarioExtra.objects.all()
+
     datos = {
         'usuarioExtra' : usuarioExtra,
-        'usuario' : usuario
+        'usuario' : usuario,
+        'historial' : historial,
+        'usuarioRun' : usuarioRun
     }
 
-    return render(request, 'app')
+    return render(request, 'app/perfil.html', datos)
+
+def cambiarFoto(request, rut):
+
+    usuarios = UsuarioExtra.objects.get(run=rut)
+
+    datos = {
+        'form' : CambiarImg(instance=usuarios)
+    }
+
+    if request.method == 'POST':
+        formulario = CambiarImg(data=request.POST, files=request.FILES, instance=usuarios)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "La foto se actualizó exitosamente.")
+            datos['form'] = formulario
+            return redirect(to='perfil')
+
+        return redirect(to='perfil')
+
+    return render(request, 'app/perfil.html', datos)
+
+@login_required
+def tracking(request, codigo):
+    usuario = request.user
+    usuarioExtra = UsuarioExtra.objects.get(usuarioDjango = usuario)
+
+    seguimiento = Orden.objects.get(codigo = codigo)
+
+    historial = Orden.objects.filter(cliente = request.user.username)
+    
+    datos = {
+        'seguimiento' : seguimiento,
+        'usuarioExtra' : usuarioExtra,
+        'usuario' : usuario,
+        'historial' : historial
+    }
+    return render(request, 'app/tracking.html', datos)
 
 @permission_required('app.add_usuario')
 #CRUD Seccion > Agregar (CREATE)
@@ -394,39 +505,35 @@ def eliminarUsuario(request, cod_usuario):
 def despacho(request):
     return render(request, 'app/despacho.html')
 
-def ordenUsuario(request):
+@permission_required('app.change_orden')
+def order(request):
 
     orden = Orden.objects.all()
 
-    estados = EstadoOrden.objects.all()
-
     datos = {
         'orden' : orden,
-        'estados' : estados
     }
 
-    return render(request, '')
+    return render(request, 'app/order.html', datos)
 
-def CambiarEstadoOrden(request, codigoOrden):
-
-    mensaje = " "
+@permission_required('app.change_estado_orden')
+def alterarEstado(request, code):
 
     estados = EstadoOrden.objects.all()
-    orden = Orden.objects.get(codigo = codigoOrden)
+
+    orden = Orden.objects.get(codigo = code)
 
     if request.method == 'POST':
-        estadoNuevo = request.POST.get('estados')
-        orden.estado_pedido = estadoNuevo
+        estadoAlterado = request.POST.get('estados')
+        orden.estado_pedido = estadoAlterado
         orden.save()
-        mensaje = "Estado de pedido actualizado. ✅"
 
-    retorno = {
+        return redirect(to='perfil')
+
+    datos = {
         'estados' : estados,
         'orden' : orden,
-        'mensaje' : mensaje
     }
 
-    return render(request, ) #TERMINAR
+    return render(request, 'app/alterarEstado.html', datos)
 
-def seguimiento (request):
-    return render(request, 'app/seguimiento.html')

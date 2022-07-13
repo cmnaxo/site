@@ -18,7 +18,7 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!-- Slysheet -->
-    <link rel="stylesheet" href="{% static 'app/css/hist.css' %}">
+ 
 
     <style>
         .bg {
@@ -92,9 +92,7 @@
                 {% endfor %}
                 
                 <div class="mt-5">
-                    <button class="btn btn-dark px-5">
-                        <a href="{% url 'success' %}">Terminar compra</a>
-                    </button>
+                        <a href="{% url 'index-log' %}" class="btn btn-dark btn-lg px-5">Volver a la tienda</a>
                 </div>
             </div>
         </div>

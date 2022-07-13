@@ -89,9 +89,13 @@
                             </div>
                             <!-- RD Navbar Nav-->
                             <div class="rd-navbar-nav-wrap">
-                                {% if user.is_authenticated %}
+                                {% if UsuarioExtra.suscripcion == False %}
                                 <div class="rd-navbar-main-item"><a class="button button-xs button-lighter"
-                                        href="{% url 'suscribe' %}">Suscribirse</a>
+                                        href="{% url 'suscribete' %}">Suscribirse</a>
+                                </div>
+                                {% else %}
+                                <div class="rd-navbar-main-item"><a class="button button-xs button-lighter"
+                                        href="{% url 'suscribete' %}">Usuarios suscritos</a>
                                 </div>
                                 {% endif %}
 
@@ -104,7 +108,7 @@
                                 <!-- RD Navbar Nav-->
                                 <ul class="rd-navbar-nav">
                                     {% if user.is_authenticated %}
-                                    <li>Bienvenido <b>{{ user.username }}</b></li>
+                                    <li>Bienvenido <b><a href="{% url 'perfil' %}">{{ user.username }}</a></b></li>
                                     {% endif %}
                                     <li class="active"><a href="{% url 'index-log' %}">Inicio</a>
                                     </li>
@@ -117,6 +121,7 @@
                                     <li><a href="{% url 'apiProductos' %}">API</a></li>
                                     <li><a href="{% url 'cart' %}"><i class="icon-sm fa-solid fa-cart-shopping"></i></a>
                                     </li>
+
                                 </ul>
                             </div>
                         </div>
@@ -216,7 +221,6 @@
     <!-- Global Mailform Output-->
     <div class="snackbars" id="form-output-global"></div>
     <!-- Javascript-->
-    <script src="https://kit.fontawesome.com/b44ff12dcf.js" crossorigin="anonymous"></script>
 
     {% block js %}
     {% endblock %}

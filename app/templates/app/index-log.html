@@ -2,9 +2,19 @@
 
 {% load static %}
 
+<script>
+  function alarmaCarro() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Producto añadido al carro',
+    })
+  }
+</script>
+
 {% block js %}
 <script src="{% static 'app/js/core.min.js' %}"></script>
 <script src="{% static 'app/js/script.js' %}"></script>
+<script src="https://kit.fontawesome.com/201353bdaf.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block css %}
@@ -87,13 +97,13 @@
   </div>
   <div class="isotope" data-isotope-layout="fitRows" data-isotope-group="products">
     <div class="row row-offset-2">
-      {% for aux in listaProductos %}
+      {% for aux in listaApiProductos %}
       <div class="col-6 col-md-4 col-lg-3 isotope-item" data-filter="Category 1">
         <!-- Product-->
         <article class="product">
           <a class="product__image-wrap" href="#">
             {% if aux.imagen %}
-            <img class="product__image" src="{{ aux.imagen.url }}" alt="" width="210" height="200" />
+            <img class="product__image" src="{{ aux.imagen }}" alt="" width="210" height="200" />
             {% else %}
             <img src="product_image" src="{% static 'app/images/defecto.png' %}" alt="" width="210" height="200">
             {% endif %}
@@ -105,16 +115,15 @@
           </div>
           <div class="product__footer">
             <form action="" method="POST">
-              
+
               {% csrf_token %}
 
               <input type="hidden" name="imagen" id="imagen" value="{{ aux.imagen }}">
               <input type="hidden" name="nombre_producto" id="nombre_producto" value="{{ aux.nombre | title }}">
               <input type="hidden" name="precio_producto" id="precio_producto" value="{{ aux.precio }}">
               <input type="hidden" name="codigo_producto" id="codigo_producto" value="{{ aux.cod }}">
-              <input type="submit" style="cursor: pointer;" class="button button-xs button-gray-2"
-                value="Agregar al carro">
-                
+              <input type="submit" style="cursor: pointer;" class="button button-xs button-gray-2" value="Agregar al carro">
+
             </form>
           </div>
         </article>
@@ -131,7 +140,9 @@
 <div class="footer-classic__main">
   <ul class="list-nav-bordered">
     <li><a href="{% url 'index-log' %}">Inicio</a></li>
+    {% if user.is_not_authenticated %}
     <li><a href="{% url 'about-us' %}">Sobre nosotros</a></li>
+    {% endif %}
     <li><a href="{% url 'products' %}">Productos</a></li>
     </li>
   </ul>
